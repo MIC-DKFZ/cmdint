@@ -2,12 +2,13 @@
   {
     "cmd_interface": {
       "output": [
-        "2019-02-04 11:52:04 >> ls START",
-        "2019-02-04 11:52:04 >> ls END"
+        "2019-02-04 11:55:47 >> ls START",
+        "2019-02-04 11:55:47 >> ls END"
       ],
       "repositories": {
         "/cmdint/examples": {
-          "autocommit": false
+          "autocommit": false,
+          "hash": "7ac1ce3a651c22a8207fc0c1353798e7349fdc24"
         }
       }
     },
@@ -45,8 +46,8 @@
         }
       ],
       "time": {
-        "start": "2019-02-04 11:52:04",
-        "end": "2019-02-04 11:52:04",
+        "start": "2019-02-04 11:55:47",
+        "end": "2019-02-04 11:55:47",
         "duration": "0:00:00",
         "utc_offset": 3600
       },

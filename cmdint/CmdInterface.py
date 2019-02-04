@@ -211,18 +211,22 @@ class CmdInterface:
         Check if the repository is dirty and commit if necessary.
         """
         try:
+            CmdInterface.__git_repos[repo_path]['dirty'] = False
             repo = git.Repo(path=repo_path, search_parent_directories=True)
             if repo.is_dirty() and CmdInterface.__git_repos[repo_path]['autocommit']:
+                CmdInterface.__git_repos[repo_path]['dirty'] = True
                 print('Repo ' + repo_path + ' is dirty. Committing changes.')
                 repo.git.add('-u')
                 repo.index.commit('CmdInterface automatic commit')
                 print('git commit hash: ' + repo.head.object.hexsha)
             elif repo.is_dirty():
+                CmdInterface.__git_repos[repo_path]['dirty'] = True
                 print('Warning, repo ' + repo_path + ' is dirty!')
             CmdInterface.__git_repos[repo_path]['hash'] = repo.head.object.hexsha
             CmdInterface.__git_repos[repo_path]['autocommit'] = CmdInterface.__git_repos[repo_path]['autocommit']
         except Exception as err:
             print('Exception: ' + str(err))
+            CmdInterface.__git_repos[repo_path]['exception'] = str(err)
 
     def get_py_function_return(self):
         """

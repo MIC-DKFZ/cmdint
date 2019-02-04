@@ -169,6 +169,12 @@ class CmdInterface:
             CmdInterface.add_repo_path(path, autocommit=CmdInterface.__autocommit_mainfile_repo)
         except:
             pass
+        path = os.path.dirname(__file__)
+        try:
+            git.Repo(path=path, search_parent_directories=True)
+            CmdInterface.add_repo_path(path, autocommit=False)
+        except:
+            pass
 
     @staticmethod
     def add_repo_path(path: str, autocommit: bool = False):
@@ -182,7 +188,7 @@ class CmdInterface:
                 git.Repo(path=path, search_parent_directories=True)
                 CmdInterface.__git_repos[path] = dict()
                 CmdInterface.__git_repos[path]['autocommit'] = autocommit
-                CmdInterface.check_repo()
+                CmdInterface.__check_repo(path)
             except git.exc.InvalidGitRepositoryError as err:
                 print('InvalidGitRepositoryError: ' + str(err))
             except Exception as err:
@@ -199,25 +205,24 @@ class CmdInterface:
             del CmdInterface.__git_repos[path]
 
     @staticmethod
-    def check_repo():
+    def __check_repo(repo_path: str):
         """
         Automatically called when a git repository path is set.
         Check if the repository is dirty and commit if necessary.
         """
-        for repo_path in CmdInterface.__git_repos.keys():
-            try:
-                repo = git.Repo(path=repo_path, search_parent_directories=True)
-                if repo.is_dirty() and CmdInterface.__git_repos[repo_path]['autocommit']:
-                    print('Repo ' + repo_path + ' is dirty. Committing changes.')
-                    repo.git.add('-u')
-                    repo.index.commit('CmdInterface automatic commit')
-                    print('git commit hash: ' + repo.head.object.hexsha)
-                elif repo.is_dirty():
-                    print('Warning, repo ' + repo_path + ' is dirty!')
-                CmdInterface.__git_repos[repo_path]['hash'] = repo.head.object.hexsha
-                CmdInterface.__git_repos[repo_path]['autocommit'] = CmdInterface.__git_repos[repo_path]['autocommit']
-            except Exception as err:
-                print('Exception: ' + str(err))
+        try:
+            repo = git.Repo(path=repo_path, search_parent_directories=True)
+            if repo.is_dirty() and CmdInterface.__git_repos[repo_path]['autocommit']:
+                print('Repo ' + repo_path + ' is dirty. Committing changes.')
+                repo.git.add('-u')
+                repo.index.commit('CmdInterface automatic commit')
+                print('git commit hash: ' + repo.head.object.hexsha)
+            elif repo.is_dirty():
+                print('Warning, repo ' + repo_path + ' is dirty!')
+            CmdInterface.__git_repos[repo_path]['hash'] = repo.head.object.hexsha
+            CmdInterface.__git_repos[repo_path]['autocommit'] = CmdInterface.__git_repos[repo_path]['autocommit']
+        except Exception as err:
+            print('Exception: ' + str(err))
 
     def get_py_function_return(self):
         """

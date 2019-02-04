@@ -3,6 +3,8 @@ import socket
 import platform
 import sys
 import math
+import multiprocessing
+from psutil import virtual_memory
 try:
     from pip._internal.operations import freeze
 except ImportError:  # pip < 10.0
@@ -52,6 +54,8 @@ class CmdLog(dict):
         self['environment']['platform']['release'] = platform.uname().release
         self['environment']['platform']['version'] = platform.uname().version
         self['environment']['platform']['machine'] = platform.uname().machine
+        self['environment']['platform']['logical_cores'] = multiprocessing.cpu_count()
+        self['environment']['platform']['memory_gb'] = virtual_memory().total / (1024**3)
         self['environment']['platform']['node'] = platform.uname().node
         self['environment']['platform']['ip'] = CmdLog.get_local_ip()
         self['environment']['python'] = dict()

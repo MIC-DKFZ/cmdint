@@ -11,6 +11,7 @@ Features:
     * Command output (stdout + stderr)
     * Command parameters
     * Command version
+    * Command call stack
     * Input and output file hashes
     * Execution times
     * Git repository information

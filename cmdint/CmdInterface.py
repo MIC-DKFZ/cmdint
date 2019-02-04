@@ -421,7 +421,6 @@ class CmdInterface:
         """
         Run python function and store terminal output in log (['command']['text_output']).
         """
-        self.append_log()
         original_stdout = sys.stdout
         original_stderr = sys.stderr
         sys.stdout = sys.stderr = out_string = io.StringIO()
@@ -451,7 +450,6 @@ class CmdInterface:
         """
         Run command line tool and store output in log.
         """
-        self.append_log()
         # print version argument if using MITK cmd app or if version arg is specified explicitely
         if version_arg is not None:
             self.__log['command']['text_output'].append('')
@@ -533,7 +531,7 @@ class CmdInterface:
             return
         self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
-        self.__log['command']['options'] = [self.__no_key_options, self.__options]
+        self.__log['command']['options'] = [str(self.__no_key_options), str(self.__options)]
         data = list()
         if os.path.isfile(CmdInterface.__logfile_name):
             with open(CmdInterface.__logfile_name) as f:
@@ -553,7 +551,7 @@ class CmdInterface:
             return
         self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
-        self.__log['command']['options'] = [self.__no_key_options, self.__options]
+        self.__log['command']['options'] = [str(self.__no_key_options), str(self.__options)]
         data = list()
         if os.path.isfile(CmdInterface.__logfile_name):
             with open(CmdInterface.__logfile_name) as f:
@@ -576,7 +574,7 @@ class CmdInterface:
         files_to_clear -- additional files to clear from the specified strings
         files_to_delete -- files to delete
         """
-        if CmdInterface.__logfile_name is None:
+        if CmdInterface.__logfile_name is None or not os.path.isfile(CmdInterface.__logfile_name):
             return
 
         if clear_strings is None:
@@ -707,6 +705,7 @@ class CmdInterface:
         self.__log['command']['run_string'] = run_string
 
         start_time = self.__log_start()
+        self.append_log()
 
         if run_necessary and run_possible:
             self.__log['command']['input']['found'] = CmdInterface.get_file_hashes(check_input)

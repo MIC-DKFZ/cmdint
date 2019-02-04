@@ -2,6 +2,7 @@ import threading
 import socket
 import platform
 import sys
+import math
 try:
     from pip._internal.operations import freeze
 except ImportError:  # pip < 10.0
@@ -83,8 +84,13 @@ class ProgressBar:
     """
 
     def __init__(self, max):
-        self.max = max
         self.range = 50
+        self.max = max
+        self.incr = 1
+        if self.max < self.range:
+            self.incr = math.ceil(self.range/self.max)
+            self.max *= self.incr
+
         self.c = 0
         self.last_tick = 0
         major = self.range // 10
@@ -102,13 +108,15 @@ class ProgressBar:
         print('')
 
     def next(self):
-        self.c += 1
 
-        if (self.range * self.c) // self.max > self.last_tick:
-            self.last_tick = (self.range * self.c) // self.max
-            print('*', end='')
-        if self.c == self.max:
-            print('*')
+        for i in range(self.incr):
+            self.c += 1
+
+            if (self.range * self.c) // self.max > self.last_tick:
+                self.last_tick = (self.range * self.c) // self.max
+                print('*', end='')
+            if self.c == self.max:
+                print('*')
 
 
 class ThreadWithReturn(threading.Thread):

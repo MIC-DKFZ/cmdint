@@ -30,11 +30,18 @@
         },
         {
           "file": "/cmdint/examples/simple.py",
-          "line": "14",
+          "line": "21",
           "function": "<module>"
         }
       ],
       "text_output": [
+        "ls (GNU coreutils) 8.28",
+        "Copyright (C) 2017 Free Software Foundation, Inc.",
+        "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.",
+        "This is free software: you are free to change and redistribute it.",
+        "There is NO WARRANTY, to the extent permitted by law.",
+        "",
+        "Written by Richard M. Stallman and David MacKenzie.",
         "total 48",
         "-rw-rw-r-- 1 neher neher 31264 Feb  4 12:18 CmdInterface.py",
         "-rw-rw-r-- 1 neher neher   179 Feb  4 11:23 __init__.py",

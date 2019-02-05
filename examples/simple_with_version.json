@@ -5,19 +5,19 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:52:33 >> ls START",
-        "2019-02-05 09:52:33 >> ls END"
+        "2019-02-05 11:37:38 >> ls START",
+        "2019-02-05 11:37:38 >> ls END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         }
       }
     },
@@ -30,7 +30,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "719",
+          "line": "721",
           "function": "run"
         },
         {
@@ -51,8 +51,8 @@
         "drwxr-xr-x   2 root root       4096 Jan 29 13:01 bin",
         "drwxr-xr-x   3 root root       4096 Feb  5 06:38 boot",
         "drwxrwxr-x   2 root root       4096 Jan 29 12:49 cdrom",
-        "drwxr-xr-x  19 root root       4820 Feb  4 09:00 dev",
-        "drwxr-xr-x 129 root root      12288 Feb  4 17:08 etc",
+        "drwxr-xr-x  19 root root       4660 Feb  5 11:30 dev",
+        "drwxr-xr-x 131 root root      12288 Feb  5 11:10 etc",
         "drwxr-xr-x   3 root root       4096 Jan 29 12:50 home",
         "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img -> boot/initrd.img-4.15.0-45-generic",
         "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img.old -> boot/initrd.img-4.15.0-44-generic",
@@ -61,27 +61,27 @@
         "drwx------   2 root root      16384 Jan 29 12:47 lost+found",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 media",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 mnt",
-        "dr-xr-xr-x 383 root root          0 Feb  4 08:59 proc",
+        "dr-xr-xr-x 387 root root          0 Feb  5 11:07 proc",
         "drwx------   4 root root       4096 Jan 29 13:28 root",
-        "drwxr-xr-x  33 root root       1040 Feb  5 07:25 run",
+        "drwxr-xr-x  30 root root        960 Feb  5 11:12 run",
         "drwxr-xr-x   2 root root      12288 Jan 29 13:01 sbin",
         "drwxr-xr-x  14 root root       4096 Feb  1 09:47 snap",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 srv",
         "-rw-------   1 root root 2147483648 Jan 29 12:48 swapfile",
-        "dr-xr-xr-x  13 root root          0 Feb  5 07:55 sys",
-        "drwxrwxrwt  24 root root      12288 Feb  5 09:52 tmp",
+        "dr-xr-xr-x  13 root root          0 Feb  5 11:34 sys",
+        "drwxrwxrwt  20 root root      12288 Feb  5 11:35 tmp",
         "drwxr-xr-x  10 root root       4096 Jul 25  2018 usr",
         "drwxr-xr-x  14 root root       4096 Jul 25  2018 var",
         "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz -> boot/vmlinuz-4.15.0-45-generic",
         "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz.old -> boot/vmlinuz-4.15.0-44-generic"
       ],
-      "options": [
-        "['ls']",
-        "{'-l': '/'}"
-      ],
+      "options": {
+        "no_key": "[]",
+        "key_val": "{'-l': '/'}"
+      },
       "time": {
-        "start": "2019-02-05 09:52:33",
-        "end": "2019-02-05 09:52:33",
+        "start": "2019-02-05 11:37:38",
+        "end": "2019-02-05 11:37:38",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -99,8 +99,8 @@
     "environment": {
       "platform": {
         "system": "Linux",
-        "release": "4.15.0-44-generic",
-        "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
+        "release": "4.15.0-45-generic",
+        "version": "#48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019",
         "machine": "x86_64",
         "logical_cores": 16,
         "memory_gb": 62.77787399291992

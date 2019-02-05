@@ -543,7 +543,8 @@ class CmdInterface:
             return
         self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
-        self.__log['command']['options'] = [str(self.__no_key_options), str(self.__options)]
+        self.__log['command']['options']['no_key'] = str(self.__no_key_options[1:])
+        self.__log['command']['options']['key_val'] = str(self.__options)
         data = list()
         if os.path.isfile(CmdInterface.__logfile_name):
             with open(CmdInterface.__logfile_name) as f:
@@ -563,7 +564,8 @@ class CmdInterface:
             return
         self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
-        self.__log['command']['options'] = [str(self.__no_key_options), str(self.__options)]
+        self.__log['command']['options']['no_key'] = str(self.__no_key_options[1:])
+        self.__log['command']['options']['key_val'] = str(self.__options)
         data = list()
         if os.path.isfile(CmdInterface.__logfile_name):
             with open(CmdInterface.__logfile_name) as f:

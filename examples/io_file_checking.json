@@ -5,19 +5,19 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:52:44 >> echo START",
-        "2019-02-05 09:52:44 >> echo END"
+        "2019-02-05 11:38:29 >> echo START",
+        "2019-02-05 11:38:29 >> echo END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         }
       }
     },
@@ -30,7 +30,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "719",
+          "line": "721",
           "function": "run"
         },
         {
@@ -42,13 +42,13 @@
       "text_output": [
         ""
       ],
-      "options": [
-        "['echo', 'unus ignis quis vir multum ab audere']",
-        "{'>': 'io_file_checking.txt'}"
-      ],
+      "options": {
+        "no_key": "['unus ignis quis vir multum ab audere']",
+        "key_val": "{'>': 'io_file_checking.txt'}"
+      },
       "time": {
-        "start": "2019-02-05 09:52:44",
-        "end": "2019-02-05 09:52:44",
+        "start": "2019-02-05 11:38:29",
+        "end": "2019-02-05 11:38:29",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -73,8 +73,8 @@
     "environment": {
       "platform": {
         "system": "Linux",
-        "release": "4.15.0-44-generic",
-        "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
+        "release": "4.15.0-45-generic",
+        "version": "#48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019",
         "machine": "x86_64",
         "logical_cores": 16,
         "memory_gb": 62.77787399291992
@@ -280,19 +280,19 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:52:44 >> cp START",
-        "2019-02-05 09:52:44 >> cp END"
+        "2019-02-05 11:38:29 >> cp START",
+        "2019-02-05 11:38:29 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         }
       }
     },
@@ -305,7 +305,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "719",
+          "line": "721",
           "function": "run"
         },
         {
@@ -317,13 +317,13 @@
       "text_output": [
         ""
       ],
-      "options": [
-        "['cp', 'io_file_checking.txt', 'io_file_checking_copy.txt']",
-        "{}"
-      ],
+      "options": {
+        "no_key": "['io_file_checking.txt', 'io_file_checking_copy.txt']",
+        "key_val": "{}"
+      },
       "time": {
-        "start": "2019-02-05 09:52:44",
-        "end": "2019-02-05 09:52:44",
+        "start": "2019-02-05 11:38:29",
+        "end": "2019-02-05 11:38:29",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -355,8 +355,8 @@
     "environment": {
       "platform": {
         "system": "Linux",
-        "release": "4.15.0-44-generic",
-        "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
+        "release": "4.15.0-45-generic",
+        "version": "#48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019",
         "machine": "x86_64",
         "logical_cores": 16,
         "memory_gb": 62.77787399291992
@@ -562,20 +562,20 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:52:44 >> cp START",
+        "2019-02-05 11:38:29 >> cp START",
         "Skipping execution. All output files already present.",
-        "2019-02-05 09:52:44 >> cp END"
+        "2019-02-05 11:38:29 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         }
       }
     },
@@ -588,7 +588,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "719",
+          "line": "721",
           "function": "run"
         },
         {
@@ -598,13 +598,13 @@
         }
       ],
       "text_output": [],
-      "options": [
-        "['cp', 'io_file_checking.txt', 'io_file_checking_copy.txt']",
-        "{}"
-      ],
+      "options": {
+        "no_key": "['io_file_checking.txt', 'io_file_checking_copy.txt']",
+        "key_val": "{}"
+      },
       "time": {
-        "start": "2019-02-05 09:52:44",
-        "end": "2019-02-05 09:52:44",
+        "start": "2019-02-05 11:38:29",
+        "end": "2019-02-05 11:38:29",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -626,8 +626,8 @@
     "environment": {
       "platform": {
         "system": "Linux",
-        "release": "4.15.0-44-generic",
-        "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
+        "release": "4.15.0-45-generic",
+        "version": "#48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019",
         "machine": "x86_64",
         "logical_cores": 16,
         "memory_gb": 62.77787399291992
@@ -833,20 +833,20 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:52:44 >> cp START",
+        "2019-02-05 11:38:30 >> cp START",
         "Skipping execution. Input files missing: ['non_existing_file.txt']",
-        "2019-02-05 09:52:44 >> cp END"
+        "2019-02-05 11:38:30 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         }
       }
     },
@@ -859,7 +859,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "719",
+          "line": "721",
           "function": "run"
         },
         {
@@ -869,13 +869,13 @@
         }
       ],
       "text_output": [],
-      "options": [
-        "['cp', 'non_existing_file.txt', 'non_existing_file_copy.txt']",
-        "{}"
-      ],
+      "options": {
+        "no_key": "['non_existing_file.txt', 'non_existing_file_copy.txt']",
+        "key_val": "{}"
+      },
       "time": {
-        "start": "2019-02-05 09:52:44",
-        "end": "2019-02-05 09:52:44",
+        "start": "2019-02-05 11:38:30",
+        "end": "2019-02-05 11:38:30",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -899,8 +899,8 @@
     "environment": {
       "platform": {
         "system": "Linux",
-        "release": "4.15.0-44-generic",
-        "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
+        "release": "4.15.0-45-generic",
+        "version": "#48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019",
         "machine": "x86_64",
         "logical_cores": 16,
         "memory_gb": 62.77787399291992

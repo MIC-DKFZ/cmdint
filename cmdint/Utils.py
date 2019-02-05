@@ -34,7 +34,9 @@ class CmdLog(dict):
         self['command']['return_code_meaning'] = None
         self['command']['call_stack'] = None
         self['command']['text_output'] = list()
-        self['command']['options'] = None
+        self['command']['options'] = dict()
+        self['command']['options']['no_key'] = None
+        self['command']['options']['key_val'] = None
 
         self['command']['time'] = dict()
         self['command']['time']['start'] = None

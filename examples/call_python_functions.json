@@ -5,19 +5,19 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:52:55 >> my_python_function START",
-        "2019-02-05 09:52:55 >> my_python_function END"
+        "2019-02-05 11:38:38 >> my_python_function START",
+        "2019-02-05 11:38:38 >> my_python_function END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         }
       }
     },
@@ -30,7 +30,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "719",
+          "line": "721",
           "function": "run"
         },
         {
@@ -52,13 +52,13 @@
         "BLABLA 9",
         ""
       ],
-      "options": [
-        "[<function my_python_function at 0x7f3214799e18>]",
-        "{'my_arg': 'BLABLA'}"
-      ],
+      "options": {
+        "no_key": "[]",
+        "key_val": "{'my_arg': 'BLABLA'}"
+      },
       "time": {
-        "start": "2019-02-05 09:52:55",
-        "end": "2019-02-05 09:52:55",
+        "start": "2019-02-05 11:38:38",
+        "end": "2019-02-05 11:38:38",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -76,8 +76,8 @@
     "environment": {
       "platform": {
         "system": "Linux",
-        "release": "4.15.0-44-generic",
-        "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
+        "release": "4.15.0-45-generic",
+        "version": "#48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019",
         "machine": "x86_64",
         "logical_cores": 16,
         "memory_gb": 62.77787399291992
@@ -283,19 +283,19 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:52:56 >> my_python_function_with_progress START",
-        "2019-02-05 09:53:06 >> my_python_function_with_progress END"
+        "2019-02-05 11:38:38 >> my_python_function_with_progress START",
+        "2019-02-05 11:38:48 >> my_python_function_with_progress END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
+          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
         }
       }
     },
@@ -308,7 +308,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "719",
+          "line": "721",
           "function": "run"
         },
         {
@@ -323,13 +323,13 @@
         "***************************************************",
         ""
       ],
-      "options": [
-        "[<function my_python_function_with_progress at 0x7f32129a8620>]",
-        "{}"
-      ],
+      "options": {
+        "no_key": "[]",
+        "key_val": "{}"
+      },
       "time": {
-        "start": "2019-02-05 09:52:56",
-        "end": "2019-02-05 09:53:06",
+        "start": "2019-02-05 11:38:38",
+        "end": "2019-02-05 11:38:48",
         "duration": "0:00:10",
         "utc_offset": 3600
       },
@@ -347,8 +347,8 @@
     "environment": {
       "platform": {
         "system": "Linux",
-        "release": "4.15.0-44-generic",
-        "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
+        "release": "4.15.0-45-generic",
+        "version": "#48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019",
         "machine": "x86_64",
         "logical_cores": 16,
         "memory_gb": 62.77787399291992

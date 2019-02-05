@@ -1,5 +1,4 @@
 from cmdint import CmdInterface
-from pathlib import Path
 
 '''This example shows how to setup the telegram logging service. You will receive a telegram message each time a 
 command execution with CmdInterface started or finished, including the logfile after the command has finished. 
@@ -12,7 +11,7 @@ CmdInterface.set_telegram_logger(token='my-telegram-bot-token', chat_id='my-chat
 test = CmdInterface('ls')
 
 # add keyword based argument
-test.add_arg(key='-l', arg=str(Path.home()) + '/cmdint/cmdint/')
+test.add_arg(key='-l', arg='/')
 
 # run command
 test.run()

@@ -1,9 +1,12 @@
 [
   {
     "cmd_interface": {
+      "version": 1.0,
+      "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
+      "url": "https://phabricator.mitk.org/source/cmdint/",
       "output": [
-        "2019-02-04 14:50:40 >> ls START",
-        "2019-02-04 14:50:40 >> ls END"
+        "2019-02-05 09:10:30 >> ls START",
+        "2019-02-05 09:10:30 >> ls END"
       ],
       "repositories": {
         "/mrtrix3/": {
@@ -14,25 +17,25 @@
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "67af032621cd09d623e3c0461372d73e558d9d1b"
+          "hash": "172dac2960f5a10c4d0f899a128175333f2269e7"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "67af032621cd09d623e3c0461372d73e558d9d1b"
+          "hash": "172dac2960f5a10c4d0f899a128175333f2269e7"
         }
       }
     },
     "command": {
       "name": "ls",
       "is_py_function": false,
-      "run_string": "ls -l /cmdint/cmdint/",
+      "run_string": "ls -l /",
       "return_code": 1,
       "return_code_meaning": "run successful",
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "711",
+          "line": "719",
           "function": "run"
         },
         {
@@ -42,19 +45,41 @@
         }
       ],
       "text_output": [
-        "total 48",
-        "-rw-rw-r-- 1 neher neher 31582 Feb  4 14:49 CmdInterface.py",
-        "-rw-rw-r-- 1 neher neher   179 Feb  4 11:23 __init__.py",
-        "drwxrwxr-x 2 neher neher  4096 Feb  4 14:49 __pycache__",
-        "-rw-rw-r-- 1 neher neher  5044 Feb  4 13:31 Utils.py"
+        "total 2097260",
+        "drwxr-xr-x   2 root root       4096 Jan 29 13:01 bin",
+        "drwxr-xr-x   3 root root       4096 Feb  5 06:38 boot",
+        "drwxrwxr-x   2 root root       4096 Jan 29 12:49 cdrom",
+        "drwxr-xr-x  19 root root       4820 Feb  4 09:00 dev",
+        "drwxr-xr-x 129 root root      12288 Feb  4 17:08 etc",
+        "drwxr-xr-x   3 root root       4096 Jan 29 12:50 home",
+        "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img -> boot/initrd.img-4.15.0-45-generic",
+        "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img.old -> boot/initrd.img-4.15.0-44-generic",
+        "drwxr-xr-x  21 root root       4096 Jan 29 12:51 lib",
+        "drwxr-xr-x   2 root root       4096 Jul 25  2018 lib64",
+        "drwx------   2 root root      16384 Jan 29 12:47 lost+found",
+        "drwxr-xr-x   2 root root       4096 Jul 25  2018 media",
+        "drwxr-xr-x   2 root root       4096 Jul 25  2018 mnt",
+        "dr-xr-xr-x 379 root root          0 Feb  4 08:59 proc",
+        "drwx------   4 root root       4096 Jan 29 13:28 root",
+        "drwxr-xr-x  33 root root       1040 Feb  5 07:25 run",
+        "drwxr-xr-x   2 root root      12288 Jan 29 13:01 sbin",
+        "drwxr-xr-x  14 root root       4096 Feb  1 09:47 snap",
+        "drwxr-xr-x   2 root root       4096 Jul 25  2018 srv",
+        "-rw-------   1 root root 2147483648 Jan 29 12:48 swapfile",
+        "dr-xr-xr-x  13 root root          0 Feb  5 07:55 sys",
+        "drwxrwxrwt  24 root root      12288 Feb  5 08:57 tmp",
+        "drwxr-xr-x  10 root root       4096 Jul 25  2018 usr",
+        "drwxr-xr-x  14 root root       4096 Jul 25  2018 var",
+        "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz -> boot/vmlinuz-4.15.0-45-generic",
+        "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz.old -> boot/vmlinuz-4.15.0-44-generic"
       ],
       "options": [
         "['ls']",
-        "{'-l': '/cmdint/cmdint/'}"
+        "{'-l': '/'}"
       ],
       "time": {
-        "start": "2019-02-04 14:50:40",
-        "end": "2019-02-04 14:50:40",
+        "start": "2019-02-05 09:10:30",
+        "end": "2019-02-05 09:10:30",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -74,7 +99,9 @@
         "system": "Linux",
         "release": "4.15.0-44-generic",
         "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
-        "machine": "x86_64"
+        "machine": "x86_64",
+        "logical_cores": 16,
+        "memory_gb": 62.77787399291992
       },
       "python": {
         "version": "3.6.7",
@@ -85,6 +112,7 @@
         "compiler": "GCC 8.2.0",
         "implementation": "CPython",
         "imported_modules": {
+          "cmdint": "1.0",
           "re": "2.2.1",
           "git": "2.1.11",
           "gitdb": "2.0.5",
@@ -104,6 +132,7 @@
           "six": "1.12.0",
           "certifi": "2018.11.29",
           "ipaddress": "1.0",
+          "psutil": "5.5.0",
           "pip": "9.0.1",
           "optparse": "1.5.3",
           "cachecontrol": "0.11.7",
@@ -128,6 +157,7 @@
           "apturl": "0.5.2",
           "asn1crypto": "0.24.0",
           "backcall": "0.1.0",
+          "bleach": "3.1.0",
           "Brlapi": "0.6.6",
           "bz2file": "0.98",
           "certifi": "2018.11.29",
@@ -135,7 +165,6 @@
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.0",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",
@@ -143,8 +172,10 @@
           "cycler": "0.10.0",
           "decorator": "4.3.2",
           "defer": "1.0.6",
+          "defusedxml": "0.5.0",
           "dipy": "0.15.0",
           "distro-info": "0.18",
+          "entrypoints": "0.3",
           "Flask": "1.0.2",
           "future": "0.17.1",
           "gitdb2": "2.0.5",
@@ -153,12 +184,17 @@
           "h5py": "2.9.0",
           "httplib2": "0.9.2",
           "idna": "2.8",
+          "ipykernel": "5.1.0",
           "ipython": "7.2.0",
           "ipython-genutils": "0.2.0",
+          "ipywidgets": "7.4.2",
           "itsdangerous": "1.1.0",
           "jedi": "0.13.2",
           "Jinja2": "2.10",
           "jsonschema": "2.6.0",
+          "jupyter": "1.0.0",
+          "jupyter-client": "5.2.4",
+          "jupyter-console": "6.0.0",
           "jupyter-core": "4.4.0",
           "keyring": "10.6.0",
           "keyrings.alt": "3.0",
@@ -172,13 +208,17 @@
           "Mako": "1.0.7",
           "MarkupSafe": "1.1.0",
           "matplotlib": "3.0.2",
+          "mistune": "0.8.4",
+          "nbconvert": "5.4.0",
           "nbformat": "4.4.0",
           "netifaces": "0.10.4",
           "nibabel": "2.3.3",
+          "notebook": "5.7.4",
           "numpy": "1.16.1",
           "oauth": "1.0.1",
           "olefile": "0.45.1",
           "pandas": "0.24.0",
+          "pandocfilters": "1.4.2",
           "parso": "0.3.2",
           "pexpect": "4.6.0",
           "pickleshare": "0.7.5",
@@ -186,6 +226,7 @@
           "pip": "9.0.1",
           "plotly": "3.5.0",
           "portalocker": "1.3.0",
+          "prometheus-client": "0.5.0",
           "prompt-toolkit": "2.0.8",
           "protobuf": "3.0.0",
           "psutil": "5.5.0",
@@ -208,6 +249,7 @@
           "pyxdg": "0.25",
           "PyYAML": "3.12",
           "pyzmq": "17.1.2",
+          "qtconsole": "4.4.3",
           "reportlab": "3.4.0",
           "requests": "2.21.0",
           "requests-unixsocket": "0.1.5",
@@ -216,6 +258,7 @@
           "scipy": "1.2.0",
           "seaborn": "0.9.0",
           "SecretStorage": "2.3.1",
+          "Send2Trash": "1.5.0",
           "setuptools": "40.7.3",
           "simplejson": "3.13.2",
           "six": "1.12.0",
@@ -224,6 +267,8 @@
           "ssh-import-id": "5.7",
           "system-service": "0.3",
           "systemd-python": "234",
+          "terminado": "0.8.1",
+          "testpath": "0.4.2",
           "torch": "1.0.0",
           "torchfile": "0.1.0",
           "torchvision": "0.2.1",
@@ -241,9 +286,11 @@
           "visdom": "0.1.8.8",
           "wadllib": "1.3.2",
           "wcwidth": "0.1.7",
+          "webencodings": "0.5.1",
           "websocket-client": "0.54.0",
           "Werkzeug": "0.14.1",
           "wheel": "0.30.0",
+          "widgetsnbextension": "3.4.2",
           "xkit": "0.0.0",
           "xmltodict": "0.11.0",
           "zope.interface": "4.3.2"

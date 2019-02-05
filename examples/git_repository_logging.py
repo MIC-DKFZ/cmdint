@@ -16,7 +16,7 @@ CmdInterface.add_repo_path(str(Path.home()) + '/mrtrix3/', autocommit=False)
 
 CmdInterface.set_static_logfile('git_repository_logging.json', delete_existing=True)
 test = CmdInterface('ls')
-test.add_arg(key='-l', arg=str(Path.home()) + '/cmdint/cmdint/')
+test.add_arg(key='-l', arg='/')
 test.run()
 
 CmdInterface.anonymize_log(out_log_name='git_repository_logging.json')

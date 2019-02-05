@@ -1,5 +1,4 @@
 from cmdint import CmdInterface
-from pathlib import Path
 
 '''Minimal example of command execution and logging with CmdInterface
 '''
@@ -8,7 +7,7 @@ from pathlib import Path
 test = CmdInterface('ls')
 
 # add keyword based argument
-test.add_arg(key='-l', arg=str(Path.home()) + '/cmdint/cmdint/')
+test.add_arg(key='-l', arg='/')
 
 # run command
 test.run()

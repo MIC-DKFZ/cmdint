@@ -103,15 +103,23 @@ class CmdInterface:
                 print("Could not send message to telegram: " + str(err))
 
     @staticmethod
-    def send_telegram_logfile():
+    def send_telegram_logfile(message: str = None):
         """
         Send logfile to the previously specified chat_id.
         """
         if CmdInterface.__bot is not None and os.path.isfile(CmdInterface.__logfile_name):
             try:
+                text = None
+                if CmdInterface.__caption is not None:
+                    text = CmdInterface.__caption
+                if message is not None:
+                    if text is None:
+                        text = message
+                    else:
+                        text += '\n' +  message
                 CmdInterface.__bot.send_document(chat_id=CmdInterface.__chat_id,
                                                  document=open(CmdInterface.__logfile_name, 'rb'),
-                                                 caption=CmdInterface.__caption)
+                                                 caption=text)
             except Exception as err:
                 print("Could not send file to telegram: " + str(err))
 
@@ -748,12 +756,14 @@ class CmdInterface:
             self.log_message('Exiting due to error: ' + str(return_code))
             self.__log['command']['return_code'] = return_code
             self.update_log()
-            CmdInterface.send_telegram_logfile()
+            CmdInterface.send_telegram_logfile(message='last command: ' + str(self.__no_key_options[0]) +
+                                                       '\nreturn code: ' + str(return_code))
             exit()
 
         self.__log['command']['return_code'] = return_code
         self.update_log()
         self.__log = CmdLog()
 
-        CmdInterface.send_telegram_logfile()
+        CmdInterface.send_telegram_logfile(message='last command: ' + str(self.__no_key_options[0]) +
+                                                   '\nreturn code: ' + str(return_code))
         return return_code

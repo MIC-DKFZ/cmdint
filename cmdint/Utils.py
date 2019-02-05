@@ -4,6 +4,7 @@ import platform
 import sys
 import math
 import multiprocessing
+import cmdint
 from psutil import virtual_memory
 try:
     from pip._internal.operations import freeze
@@ -19,6 +20,9 @@ class CmdLog(dict):
     def __init__(self):
         super().__init__()
         self['cmd_interface'] = dict()
+        self['cmd_interface']['version'] = cmdint.__version__
+        self['cmd_interface']['copyright'] = cmdint.__copyright__
+        self['cmd_interface']['url'] = 'https://phabricator.mitk.org/source/cmdint/'
         self['cmd_interface']['output'] = list()
         self['cmd_interface']['repositories'] = None
 

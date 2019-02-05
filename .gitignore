@@ -2,3 +2,5 @@
 /dist/
 /*.egg-info
 .idea/
+.ipynb_checkpoints/
+examples/CmdInterface.json

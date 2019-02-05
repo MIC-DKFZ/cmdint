@@ -3,21 +3,21 @@
     "cmd_interface": {
       "version": 1.0,
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
-      "url": "https://phabricator.mitk.org/source/cmdint/",
+      "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:15:03 >> my_python_function START",
-        "2019-02-05 09:15:03 >> my_python_function END"
+        "2019-02-05 09:52:55 >> my_python_function START",
+        "2019-02-05 09:52:55 >> my_python_function END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "172dac2960f5a10c4d0f899a128175333f2269e7"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "172dac2960f5a10c4d0f899a128175333f2269e7"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         }
       }
     },
@@ -53,12 +53,12 @@
         ""
       ],
       "options": [
-        "[<function my_python_function at 0x7fb923ecde18>]",
+        "[<function my_python_function at 0x7f3214799e18>]",
         "{'my_arg': 'BLABLA'}"
       ],
       "time": {
-        "start": "2019-02-05 09:15:03",
-        "end": "2019-02-05 09:15:03",
+        "start": "2019-02-05 09:52:55",
+        "end": "2019-02-05 09:52:55",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -281,21 +281,21 @@
     "cmd_interface": {
       "version": 1.0,
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
-      "url": "https://phabricator.mitk.org/source/cmdint/",
+      "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:15:04 >> my_python_function_with_progress START",
-        "2019-02-05 09:15:14 >> my_python_function_with_progress END"
+        "2019-02-05 09:52:56 >> my_python_function_with_progress START",
+        "2019-02-05 09:53:06 >> my_python_function_with_progress END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "172dac2960f5a10c4d0f899a128175333f2269e7"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "172dac2960f5a10c4d0f899a128175333f2269e7"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         }
       }
     },
@@ -324,12 +324,12 @@
         ""
       ],
       "options": [
-        "[<function my_python_function_with_progress at 0x7fb9220dc620>]",
+        "[<function my_python_function_with_progress at 0x7f32129a8620>]",
         "{}"
       ],
       "time": {
-        "start": "2019-02-05 09:15:04",
-        "end": "2019-02-05 09:15:14",
+        "start": "2019-02-05 09:52:56",
+        "end": "2019-02-05 09:53:06",
         "duration": "0:00:10",
         "utc_offset": 3600
       },
@@ -351,9 +351,7 @@
         "version": "#47-Ubuntu SMP Mon Jan 14 11:26:59 UTC 2019",
         "machine": "x86_64",
         "logical_cores": 16,
-        "memory_gb": 62.77787399291992,
-        "node": "MBI096",
-        "ip": "193.174.50.109"
+        "memory_gb": 62.77787399291992
       },
       "python": {
         "version": "3.6.7",

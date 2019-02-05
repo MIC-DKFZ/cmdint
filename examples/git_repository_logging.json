@@ -3,10 +3,10 @@
     "cmd_interface": {
       "version": 1.0,
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
-      "url": "https://phabricator.mitk.org/source/cmdint/",
+      "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 09:10:30 >> ls START",
-        "2019-02-05 09:10:30 >> ls END"
+        "2019-02-05 09:52:49 >> ls START",
+        "2019-02-05 09:52:49 >> ls END"
       ],
       "repositories": {
         "/mrtrix3/": {
@@ -17,12 +17,12 @@
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "172dac2960f5a10c4d0f899a128175333f2269e7"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "172dac2960f5a10c4d0f899a128175333f2269e7"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         }
       }
     },
@@ -59,7 +59,7 @@
         "drwx------   2 root root      16384 Jan 29 12:47 lost+found",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 media",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 mnt",
-        "dr-xr-xr-x 379 root root          0 Feb  4 08:59 proc",
+        "dr-xr-xr-x 383 root root          0 Feb  4 08:59 proc",
         "drwx------   4 root root       4096 Jan 29 13:28 root",
         "drwxr-xr-x  33 root root       1040 Feb  5 07:25 run",
         "drwxr-xr-x   2 root root      12288 Jan 29 13:01 sbin",
@@ -67,7 +67,7 @@
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 srv",
         "-rw-------   1 root root 2147483648 Jan 29 12:48 swapfile",
         "dr-xr-xr-x  13 root root          0 Feb  5 07:55 sys",
-        "drwxrwxrwt  24 root root      12288 Feb  5 08:57 tmp",
+        "drwxrwxrwt  24 root root      12288 Feb  5 09:52 tmp",
         "drwxr-xr-x  10 root root       4096 Jul 25  2018 usr",
         "drwxr-xr-x  14 root root       4096 Jul 25  2018 var",
         "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz -> boot/vmlinuz-4.15.0-45-generic",
@@ -78,8 +78,8 @@
         "{'-l': '/'}"
       ],
       "time": {
-        "start": "2019-02-05 09:10:30",
-        "end": "2019-02-05 09:10:30",
+        "start": "2019-02-05 09:52:49",
+        "end": "2019-02-05 09:52:49",
         "duration": "0:00:00",
         "utc_offset": 3600
       },

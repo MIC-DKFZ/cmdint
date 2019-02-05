@@ -22,7 +22,7 @@ class CmdLog(dict):
         self['cmd_interface'] = dict()
         self['cmd_interface']['version'] = cmdint.__version__
         self['cmd_interface']['copyright'] = cmdint.__copyright__
-        self['cmd_interface']['url'] = 'https://phabricator.mitk.org/source/cmdint/'
+        self['cmd_interface']['url'] = 'https://github.com/MIC-DKFZ/cmdint/'
         self['cmd_interface']['output'] = list()
         self['cmd_interface']['repositories'] = None
 

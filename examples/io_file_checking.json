@@ -3,21 +3,21 @@
     "cmd_interface": {
       "version": 1.0,
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
-      "url": "https://phabricator.mitk.org/source/cmdint/",
+      "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 08:57:23 >> echo START",
-        "2019-02-05 08:57:23 >> echo END"
+        "2019-02-05 09:52:44 >> echo START",
+        "2019-02-05 09:52:44 >> echo END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "7f4826e080a9824c39c1af800f7d20aecf66a8af"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "7f4826e080a9824c39c1af800f7d20aecf66a8af"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         }
       }
     },
@@ -47,8 +47,8 @@
         "{'>': 'io_file_checking.txt'}"
       ],
       "time": {
-        "start": "2019-02-05 08:57:23",
-        "end": "2019-02-05 08:57:23",
+        "start": "2019-02-05 09:52:44",
+        "end": "2019-02-05 09:52:44",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -278,21 +278,21 @@
     "cmd_interface": {
       "version": 1.0,
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
-      "url": "https://phabricator.mitk.org/source/cmdint/",
+      "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 08:57:23 >> cp START",
-        "2019-02-05 08:57:23 >> cp END"
+        "2019-02-05 09:52:44 >> cp START",
+        "2019-02-05 09:52:44 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "7f4826e080a9824c39c1af800f7d20aecf66a8af"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "7f4826e080a9824c39c1af800f7d20aecf66a8af"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         }
       }
     },
@@ -322,8 +322,8 @@
         "{}"
       ],
       "time": {
-        "start": "2019-02-05 08:57:23",
-        "end": "2019-02-05 08:57:23",
+        "start": "2019-02-05 09:52:44",
+        "end": "2019-02-05 09:52:44",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -560,22 +560,22 @@
     "cmd_interface": {
       "version": 1.0,
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
-      "url": "https://phabricator.mitk.org/source/cmdint/",
+      "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 08:57:23 >> cp START",
+        "2019-02-05 09:52:44 >> cp START",
         "Skipping execution. All output files already present.",
-        "2019-02-05 08:57:23 >> cp END"
+        "2019-02-05 09:52:44 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "7f4826e080a9824c39c1af800f7d20aecf66a8af"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "7f4826e080a9824c39c1af800f7d20aecf66a8af"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         }
       }
     },
@@ -603,8 +603,8 @@
         "{}"
       ],
       "time": {
-        "start": "2019-02-05 08:57:23",
-        "end": "2019-02-05 08:57:23",
+        "start": "2019-02-05 09:52:44",
+        "end": "2019-02-05 09:52:44",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -831,22 +831,22 @@
     "cmd_interface": {
       "version": 1.0,
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
-      "url": "https://phabricator.mitk.org/source/cmdint/",
+      "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 08:57:23 >> cp START",
+        "2019-02-05 09:52:44 >> cp START",
         "Skipping execution. Input files missing: ['non_existing_file.txt']",
-        "2019-02-05 08:57:23 >> cp END"
+        "2019-02-05 09:52:44 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty": true,
-          "hash": "7f4826e080a9824c39c1af800f7d20aecf66a8af"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty": true,
-          "hash": "7f4826e080a9824c39c1af800f7d20aecf66a8af"
+          "hash": "391963620fa99ff9b6e3ead1730aa28ba1f675c8"
         }
       }
     },
@@ -874,8 +874,8 @@
         "{}"
       ],
       "time": {
-        "start": "2019-02-05 08:57:23",
-        "end": "2019-02-05 08:57:23",
+        "start": "2019-02-05 09:52:44",
+        "end": "2019-02-05 09:52:44",
         "duration": "0:00:00",
         "utc_offset": 3600
       },

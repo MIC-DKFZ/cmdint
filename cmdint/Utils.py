@@ -72,7 +72,8 @@ class CmdLog(dict):
         self['environment']['python']['pip_freeze'] = dict()
         for module in freeze.freeze():
             module = module.split('==')
-            self['environment']['python']['pip_freeze'][module[0]] = module[1]
+            if len(module) > 1:
+                self['environment']['python']['pip_freeze'][module[0]] = module[1]
 
     @staticmethod
     def get_local_ip():

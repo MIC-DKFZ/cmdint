@@ -1,5 +1,4 @@
 from cmdint import CmdInterface
-from pathlib import Path
 
 # set output logfile and tell CmdInterface to delete a potentially present old logfile
 CmdInterface.set_static_logfile('simple.json', delete_existing=True)
@@ -8,7 +7,7 @@ CmdInterface.set_static_logfile('simple.json', delete_existing=True)
 test = CmdInterface('ls')
 
 # add keyword based argument
-test.add_arg(key='-l', arg=str(Path.home()) + '/cmdint/cmdint/')
+test.add_arg(key='-l', arg='/')
 
 # run command
 test.run()

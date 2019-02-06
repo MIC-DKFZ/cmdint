@@ -22,6 +22,9 @@ Features:
 
 Examples can be found in the "examples" folder. 
 
-Setup (python 3.X required):
-* ```git clone https://phabricator.mitk.org/source/cmdint.git```
-* ```pip3 install -e path/to/repo/```
+Setup (python 3 required):
+* pip package
+    * ```pip3 install cmdint```
+* Current master:
+    * ```git clone https://phabricator.mitk.org/source/cmdint.git```
+    * ```pip3 install -e path/to/repo/```

@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='cmdint',
-      version='1.0',
+      version='1.1',
       description='Enables detailed logging of command line calls in a very lightweight manner.',
       long_description='Enables detailed logging of command line calls in a very lightweight manner (coding wise). Also supports logging of python functions. CmdInterface logs information regarding the command version, command execution, the input and output, execution times, platform and python environment information as well as git repository information.',
       url='https://github.com/MIC-DKFZ/cmdint/',

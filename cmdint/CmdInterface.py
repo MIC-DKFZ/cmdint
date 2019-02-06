@@ -32,6 +32,7 @@ class CmdInterface:
                                     -3: 'exception'}
     __use_installer: bool = False
     __autocommit_mainfile_repo: bool = False
+    __autocommit_mainfile_repo_done: bool = True
     __immediate_return_on_run_not_necessary: bool = True
     __exit_on_error: bool = True
 
@@ -164,6 +165,7 @@ class CmdInterface:
         if dirty. Default is False.
         """
         CmdInterface.__autocommit_mainfile_repo = do_autocommit
+        CmdInterface.__autocommit_mainfile_repo_done = False
 
     @staticmethod
     def __auto_add_repo_path():
@@ -171,6 +173,8 @@ class CmdInterface:
         Add path to git repository of current main file. CmdInterface logs the current git commit hash of this
         repository.
         """
+        if CmdInterface.__autocommit_mainfile_repo_done:
+            return
         path = os.path.dirname(os.path.abspath(inspect.stack()[-1][1]))
         try:
             git.Repo(path=path, search_parent_directories=True)
@@ -183,6 +187,7 @@ class CmdInterface:
             CmdInterface.add_repo_path(path, autocommit=False)
         except:
             pass
+        CmdInterface.__autocommit_mainfile_repo_done = True
 
     @staticmethod
     def add_repo_path(path: str, autocommit: bool = False):

@@ -444,7 +444,7 @@ class CmdInterface:
                                     kwargs=self.__options)
             proc.start()
             while proc.is_alive():
-                self.__log['command']['text_output'] = out_string.getvalue().split(os.linesep)
+                self.__log['command']['text_output'] = out_string.getvalue().split('\n')
                 self.update_log()
                 time.sleep(5)
             self.__py_function_return = proc.get_retval()
@@ -453,7 +453,7 @@ class CmdInterface:
             exception = 'Exception: ' + str(err)
         sys.stdout = original_stdout
         sys.stderr = original_stderr
-        self.__log['command']['text_output'] = out_string.getvalue().split(os.linesep)
+        self.__log['command']['text_output'] = out_string.getvalue().split('\n')
         if exception is not None:
             self.__log['command']['text_output'].append(exception)
         self.update_log()

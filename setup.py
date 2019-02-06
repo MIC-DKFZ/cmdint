@@ -15,8 +15,8 @@ setup(name='cmdint',
       ],
       zip_safe=False,
       classifiers=[
-          'Programming Language :: Python :: 3.X',
+          'Programming Language :: Python :: 3',
           'Operating System :: Unix',
-          'Operating System :: Windows',
+          'Operating System :: Microsoft :: Windows',
           'Operating System :: MacOS'
       ], )

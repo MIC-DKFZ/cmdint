@@ -580,6 +580,21 @@ class CmdInterface:
             json.dump(data, f, indent=2, sort_keys=False)
 
     @staticmethod
+    def load_log() -> list:
+        """
+        Load the current json logfile and return as list of dicts.
+        """
+        if CmdInterface.__logfile_name is None or not os.path.isfile(CmdInterface.__logfile_name):
+            return None
+
+        log = list()
+        if os.path.isfile(CmdInterface.__logfile_name):
+            with open(CmdInterface.__logfile_name) as f:
+                log = json.load(f)
+
+        return log
+
+    @staticmethod
     def anonymize_log(out_log_name: str = None,
                       clear_strings: str = None,
                       files_to_clear: list = None,

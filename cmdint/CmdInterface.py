@@ -350,7 +350,6 @@ class CmdInterface:
             out = dict()
             for key in input.keys():
                 out[str(key)] = CmdInterface.__jsonable(input[key])
-                return out
             return out
         elif isinstance(input, list):
             out = list()
@@ -365,7 +364,7 @@ class CmdInterface:
         """
         Causes the CmdInterface to automatically append ".sh" to your command line tool.
         This is only sensible in certain cases, such as when switching between the installer and non-installer version
-        of MITK Diffusion cmdapps. In this acse you would't want to always change all CmdInterface instances but simply
+        of MITK Diffusion cmdapps. In this case you would't want to always change all CmdInterface instances but simply
         set this flag.
         """
         CmdInterface.__use_installer = use_installer

@@ -12,7 +12,8 @@ setup(name='cmdint',
       install_requires=[
           'python-telegram-bot',
           'GitPython',
-          'chardet'
+          'chardet',
+          'psutil'
       ],
       zip_safe=False,
       classifiers=[

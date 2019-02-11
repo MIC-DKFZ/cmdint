@@ -1,2 +1,3 @@
 python-telegram-bot
 GitPython
+chardet

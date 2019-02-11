@@ -224,16 +224,15 @@ class CmdInterface:
         Check if the repository is dirty and commit if necessary.
         """
         try:
-            CmdInterface.__git_repos[repo_path]['dirty'] = False
+            CmdInterface.__git_repos[repo_path]['dirty_files'] = []
             repo = git.Repo(path=repo_path, search_parent_directories=True)
             if repo.is_dirty() and CmdInterface.__git_repos[repo_path]['autocommit']:
-                CmdInterface.__git_repos[repo_path]['dirty'] = True
                 print('Repo ' + repo_path + ' is dirty. Committing changes.')
                 repo.git.add('-u')
                 repo.index.commit('CmdInterface automatic commit')
                 print('git commit hash: ' + repo.head.object.hexsha)
             elif repo.is_dirty():
-                CmdInterface.__git_repos[repo_path]['dirty'] = True
+                CmdInterface.__git_repos[repo_path]['dirty_files'] = [item.a_path for item in repo.index.diff(None)]
                 print('Warning, repo ' + repo_path + ' is dirty!')
             CmdInterface.__git_repos[repo_path]['hash'] = repo.head.object.hexsha
             CmdInterface.__git_repos[repo_path]['autocommit'] = CmdInterface.__git_repos[repo_path]['autocommit']
@@ -340,6 +339,25 @@ class CmdInterface:
                 run_string = run_string.replace(rep[0], rep[1])
 
         return run_string
+
+    @staticmethod
+    def __jsonable(input):
+        """
+        Stringify everything that is not dict or list.
+        """
+        if isinstance(input, dict):
+            out = dict()
+            for key in input.keys():
+                out[str(key)] = CmdInterface.__jsonable(input[key])
+                return out
+            return out
+        elif isinstance(input, list):
+            out = list()
+            for el in input:
+                out.append(CmdInterface.__jsonable(el))
+            return out
+        else:
+            return str(input)
 
     @staticmethod
     def set_use_installer(use_installer: bool):
@@ -483,7 +501,7 @@ class CmdInterface:
                 if encoding is None:
                     continue
                 c = str(c.decode(encoding))
-                if c == os.linesep:
+                if c == os.linesep or c == '\r':
                     self.__log['command']['text_output'].append('')
                 else:
                     self.__log['command']['text_output'][-1] += c
@@ -516,7 +534,7 @@ class CmdInterface:
             if encoding is None:
                 continue
             c = str(c.decode(encoding))
-            if c == os.linesep:
+            if c == os.linesep or c == '\r':
                 self.__log['command']['text_output'].append('')
             else:
                 self.__log['command']['text_output'][-1] += c
@@ -548,8 +566,8 @@ class CmdInterface:
             return
         self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
-        self.__log['command']['options']['no_key'] = str(self.__no_key_options[1:])
-        self.__log['command']['options']['key_val'] = str(self.__options)
+        self.__log['command']['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
+        self.__log['command']['options']['key_val'] = CmdInterface.__jsonable(self.__options)
         data = list()
         if os.path.isfile(CmdInterface.__logfile_name):
             with open(CmdInterface.__logfile_name) as f:
@@ -569,8 +587,8 @@ class CmdInterface:
             return
         self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
-        self.__log['command']['options']['no_key'] = str(self.__no_key_options[1:])
-        self.__log['command']['options']['key_val'] = str(self.__options)
+        self.__log['command']['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
+        self.__log['command']['options']['key_val'] = CmdInterface.__jsonable(self.__options)
         data = list()
         if os.path.isfile(CmdInterface.__logfile_name):
             with open(CmdInterface.__logfile_name) as f:

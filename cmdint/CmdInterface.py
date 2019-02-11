@@ -62,6 +62,11 @@ class CmdInterface:
         self.__is_py_function = callable(command)
         self.__py_function_return = None
 
+        if not self.__is_py_function:
+            command = command.strip()
+            if len(command) == 0 or os.system(command) != 0:
+                raise OSError('Command not found: ' + command)
+
         if not self.__is_py_function and self.__no_key_options[0][:4] == 'Mitk':
             self.add_arg('--version')
 
@@ -204,10 +209,12 @@ class CmdInterface:
                 CmdInterface.__check_repo(path)
             except git.exc.InvalidGitRepositoryError as err:
                 print('InvalidGitRepositoryError: ' + str(err))
+                raise
             except Exception as err:
                 print('Git Exception: ' + str(err))
+                raise
         else:
-            print('Error: ' + path + ' is not a directory')
+            raise NotADirectoryError('"' + path + '" is not a directory')
 
     @staticmethod
     def remove_repo_path(path: str):

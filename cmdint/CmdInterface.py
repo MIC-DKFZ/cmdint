@@ -11,6 +11,7 @@ import io
 import chardet
 import telegram
 from pathlib import Path
+from shutil import which
 from cmdint.Utils import ThreadWithReturn, CmdLog
 
 
@@ -32,7 +33,7 @@ class CmdInterface:
                                     -3: 'exception'}
     __use_installer: bool = False
     __autocommit_mainfile_repo: bool = False
-    __autocommit_mainfile_repo_done: bool = True
+    __autocommit_mainfile_repo_done: bool = False
     __immediate_return_on_run_not_necessary: bool = True
     __exit_on_error: bool = True
 
@@ -64,7 +65,7 @@ class CmdInterface:
 
         if not self.__is_py_function:
             command = command.strip()
-            if len(command) == 0 or os.system(command) != 0:
+            if len(command) == 0 or which(command) is None:
                 raise OSError('Command not found: ' + command)
 
         if not self.__is_py_function and self.__no_key_options[0][:4] == 'Mitk':
@@ -202,17 +203,10 @@ class CmdInterface:
         sensible since the logged commit hash otherwise does not capture the full state of the repository.
         """
         if os.path.isdir(path):
-            try:
-                git.Repo(path=path, search_parent_directories=True)
-                CmdInterface.__git_repos[path] = dict()
-                CmdInterface.__git_repos[path]['autocommit'] = autocommit
-                CmdInterface.__check_repo(path)
-            except git.exc.InvalidGitRepositoryError as err:
-                print('InvalidGitRepositoryError: ' + str(err))
-                raise
-            except Exception as err:
-                print('Git Exception: ' + str(err))
-                raise
+            git.Repo(path=path, search_parent_directories=True)
+            CmdInterface.__git_repos[path] = dict()
+            CmdInterface.__git_repos[path]['autocommit'] = autocommit
+            CmdInterface.__check_repo(path)
         else:
             raise NotADirectoryError('"' + path + '" is not a directory')
 

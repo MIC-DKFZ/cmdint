@@ -1,23 +1,39 @@
 [
   {
     "cmd_interface": {
-      "version": 1.0,
+      "version": "1.2.3",
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-05 11:37:38 >> ls START",
-        "2019-02-05 11:37:38 >> ls END"
+        "2019-02-11 15:39:42 >> ls START",
+        "2019-02-11 15:39:42 >> ls END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
-          "dirty": true,
-          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
+          "dirty_files": [
+            "cmdint/CmdInterface.py",
+            "examples/call_python_functions.json",
+            "examples/git_repository_logging.json",
+            "examples/io_file_checking.json",
+            "examples/simple.json",
+            "examples/simple_with_version.json",
+            "test/cmdint_tests.py"
+          ],
+          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
-          "dirty": true,
-          "hash": "40d5cd34ed8b972f391823c8dcc55340a51b49a0"
+          "dirty_files": [
+            "cmdint/CmdInterface.py",
+            "examples/call_python_functions.json",
+            "examples/git_repository_logging.json",
+            "examples/io_file_checking.json",
+            "examples/simple.json",
+            "examples/simple_with_version.json",
+            "test/cmdint_tests.py"
+          ],
+          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
         }
       }
     },
@@ -30,7 +46,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "721",
+          "line": "760",
           "function": "run"
         },
         {
@@ -44,8 +60,8 @@
         "drwxr-xr-x   2 root root       4096 Jan 29 13:01 bin",
         "drwxr-xr-x   3 root root       4096 Feb  5 06:38 boot",
         "drwxrwxr-x   2 root root       4096 Jan 29 12:49 cdrom",
-        "drwxr-xr-x  19 root root       4660 Feb  5 11:30 dev",
-        "drwxr-xr-x 131 root root      12288 Feb  5 11:10 etc",
+        "drwxr-xr-x  19 root root       4620 Feb  8 11:31 dev",
+        "drwxr-xr-x 131 root root      12288 Feb  8 06:29 etc",
         "drwxr-xr-x   3 root root       4096 Jan 29 12:50 home",
         "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img -> boot/initrd.img-4.15.0-45-generic",
         "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img.old -> boot/initrd.img-4.15.0-44-generic",
@@ -54,27 +70,29 @@
         "drwx------   2 root root      16384 Jan 29 12:47 lost+found",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 media",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 mnt",
-        "dr-xr-xr-x 387 root root          0 Feb  5 11:07 proc",
+        "dr-xr-xr-x 378 root root          0 Feb  8 11:31 proc",
         "drwx------   4 root root       4096 Jan 29 13:28 root",
-        "drwxr-xr-x  30 root root        960 Feb  5 11:12 run",
+        "drwxr-xr-x  32 root root        980 Feb 11 09:24 run",
         "drwxr-xr-x   2 root root      12288 Jan 29 13:01 sbin",
         "drwxr-xr-x  14 root root       4096 Feb  1 09:47 snap",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 srv",
         "-rw-------   1 root root 2147483648 Jan 29 12:48 swapfile",
-        "dr-xr-xr-x  13 root root          0 Feb  5 11:34 sys",
-        "drwxrwxrwt  20 root root      12288 Feb  5 11:35 tmp",
+        "dr-xr-xr-x  13 root root          0 Feb 11 15:19 sys",
+        "drwxrwxrwt  21 root root      12288 Feb 11 15:38 tmp",
         "drwxr-xr-x  10 root root       4096 Jul 25  2018 usr",
         "drwxr-xr-x  14 root root       4096 Jul 25  2018 var",
         "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz -> boot/vmlinuz-4.15.0-45-generic",
         "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz.old -> boot/vmlinuz-4.15.0-44-generic"
       ],
       "options": {
-        "no_key": "[]",
-        "key_val": "{'-l': '/'}"
+        "no_key": [],
+        "key_val": {
+          "-l": "/"
+        }
       },
       "time": {
-        "start": "2019-02-05 11:37:38",
-        "end": "2019-02-05 11:37:38",
+        "start": "2019-02-11 15:39:42",
+        "end": "2019-02-11 15:39:42",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -107,7 +125,7 @@
         "compiler": "GCC 8.2.0",
         "implementation": "CPython",
         "imported_modules": {
-          "cmdint": "1.0",
+          "cmdint": "1.2.3",
           "re": "2.2.1",
           "git": "2.1.11",
           "gitdb": "2.0.5",
@@ -154,12 +172,14 @@
           "backcall": "0.1.0",
           "bleach": "3.1.0",
           "Brlapi": "0.6.6",
+          "bumpversion": "0.5.3",
           "bz2file": "0.98",
           "certifi": "2018.11.29",
           "cffi": "1.11.5",
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
+          "cmdint": "1.2.4",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",
@@ -170,6 +190,7 @@
           "defusedxml": "0.5.0",
           "dipy": "0.15.0",
           "distro-info": "0.18",
+          "docutils": "0.14",
           "entrypoints": "0.3",
           "Flask": "1.0.2",
           "future": "0.17.1",
@@ -219,6 +240,7 @@
           "pickleshare": "0.7.5",
           "Pillow": "5.4.1",
           "pip": "9.0.1",
+          "pkginfo": "1.5.0.1",
           "plotly": "3.5.0",
           "portalocker": "1.3.0",
           "prometheus-client": "0.5.0",
@@ -235,6 +257,9 @@
           "pymacaroons": "0.13.0",
           "PyNaCl": "1.1.2",
           "pyparsing": "2.3.1",
+          "pyperclip": "1.7.0",
+          "PyQt5": "5.11.3",
+          "PyQt5-sip": "4.19.13",
           "pyRFC3339": "1.0",
           "python-apt": "1.6.3",
           "python-dateutil": "2.7.5",
@@ -245,8 +270,10 @@
           "PyYAML": "3.12",
           "pyzmq": "17.1.2",
           "qtconsole": "4.4.3",
+          "readme-renderer": "24.0",
           "reportlab": "3.4.0",
           "requests": "2.21.0",
+          "requests-toolbelt": "0.9.1",
           "requests-unixsocket": "0.1.5",
           "retrying": "1.3.3",
           "scikit-learn": "0.20.2",
@@ -254,7 +281,8 @@
           "seaborn": "0.9.0",
           "SecretStorage": "2.3.1",
           "Send2Trash": "1.5.0",
-          "setuptools": "40.7.3",
+          "setuptools": "40.8.0",
+          "SimpleITK": "1.2.0",
           "simplejson": "3.13.2",
           "six": "1.12.0",
           "sklearn": "0.0",
@@ -272,6 +300,7 @@
           "TractSeg": "1.9",
           "traitlets": "4.3.2",
           "trixi-slim": "0.1.1.6",
+          "twine": "1.12.1",
           "ubuntu-drivers-common": "0.0.0",
           "ufw": "0.35",
           "unattended-upgrades": "0.1",
@@ -284,7 +313,7 @@
           "webencodings": "0.5.1",
           "websocket-client": "0.54.0",
           "Werkzeug": "0.14.1",
-          "wheel": "0.30.0",
+          "wheel": "0.32.3",
           "widgetsnbextension": "3.4.2",
           "xkit": "0.0.0",
           "xmltodict": "0.11.0",

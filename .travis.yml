@@ -3,6 +3,6 @@ python:
   - "3.6"
 cache: pip
 install:
-  - pip install -r requirements.txt
+  - pip install https://github.com/MIC-DKFZ/cmdint/archive/master.zip
 script:
   - python test/cmdint_tests.py

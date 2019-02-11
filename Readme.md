@@ -28,6 +28,8 @@ Examples can be found in the "examples" folder.
 Setup (python 3 required):
 * pip package
     * ```pip3 install cmdint```
-* Current master:
+* Current master variant 1:
+    * ```pip3 install https://github.com/MIC-DKFZ/cmdint/archive/master.zip```
+* Current master variant 2:
     * ```git clone https://phabricator.mitk.org/source/cmdint.git```
     * ```pip3 install -e path/to/repo/```

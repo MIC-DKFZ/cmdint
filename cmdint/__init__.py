@@ -1,4 +1,4 @@
-__version__ = "1.2.5"
+__version__ = "1.2.6"
 __copyright__ = "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing"
 
 from cmdint.CmdInterface import CmdInterface

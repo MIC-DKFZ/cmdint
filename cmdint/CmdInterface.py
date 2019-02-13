@@ -65,6 +65,8 @@ class CmdInterface:
 
         if not self.__is_py_function:
             command = command.strip()
+            if CmdInterface.__use_installer:
+                command += '.sh'
             if len(command) == 0 or which(command) is None:
                 raise OSError('Command not found: ' + command)
 

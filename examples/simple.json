@@ -1,39 +1,27 @@
 [
   {
     "cmd_interface": {
-      "version": "1.2.3",
+      "version": "1.2.8",
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-11 15:39:42 >> ls START",
-        "2019-02-11 15:39:42 >> ls END"
+        "2019-02-14 08:58:18 >> ls START",
+        "2019-02-14 08:58:18 >> ls END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
-            "examples/io_file_checking.json",
-            "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
-            "examples/io_file_checking.json",
-            "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         }
       }
     },
@@ -46,7 +34,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "760",
+          "line": "774",
           "function": "run"
         },
         {
@@ -56,12 +44,12 @@
         }
       ],
       "text_output": [
-        "total 2097260",
-        "drwxr-xr-x   2 root root       4096 Jan 29 13:01 bin",
+        "total 2097268",
+        "drwxr-xr-x   2 root root       4096 Feb 12 11:29 bin",
         "drwxr-xr-x   3 root root       4096 Feb  5 06:38 boot",
         "drwxrwxr-x   2 root root       4096 Jan 29 12:49 cdrom",
-        "drwxr-xr-x  19 root root       4620 Feb  8 11:31 dev",
-        "drwxr-xr-x 131 root root      12288 Feb  8 06:29 etc",
+        "drwxr-xr-x  19 root root       4620 Feb 12 11:02 dev",
+        "drwxr-xr-x 132 root root      12288 Feb 14 06:07 etc",
         "drwxr-xr-x   3 root root       4096 Jan 29 12:50 home",
         "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img -> boot/initrd.img-4.15.0-45-generic",
         "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img.old -> boot/initrd.img-4.15.0-44-generic",
@@ -70,15 +58,15 @@
         "drwx------   2 root root      16384 Jan 29 12:47 lost+found",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 media",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 mnt",
-        "dr-xr-xr-x 378 root root          0 Feb  8 11:31 proc",
+        "dr-xr-xr-x 384 root root          0 Feb 12 11:02 proc",
         "drwx------   4 root root       4096 Jan 29 13:28 root",
-        "drwxr-xr-x  32 root root        980 Feb 11 09:24 run",
+        "drwxr-xr-x  32 root root       1020 Feb 14 06:07 run",
         "drwxr-xr-x   2 root root      12288 Jan 29 13:01 sbin",
-        "drwxr-xr-x  14 root root       4096 Feb  1 09:47 snap",
+        "drwxr-xr-x  13 root root       4096 Feb 13 10:41 snap",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 srv",
         "-rw-------   1 root root 2147483648 Jan 29 12:48 swapfile",
-        "dr-xr-xr-x  13 root root          0 Feb 11 15:19 sys",
-        "drwxrwxrwt  21 root root      12288 Feb 11 15:38 tmp",
+        "dr-xr-xr-x  13 root root          0 Feb 12 11:02 sys",
+        "drwxrwxrwt  23 root root      20480 Feb 14 08:44 tmp",
         "drwxr-xr-x  10 root root       4096 Jul 25  2018 usr",
         "drwxr-xr-x  14 root root       4096 Jul 25  2018 var",
         "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz -> boot/vmlinuz-4.15.0-45-generic",
@@ -91,8 +79,8 @@
         }
       },
       "time": {
-        "start": "2019-02-11 15:39:42",
-        "end": "2019-02-11 15:39:42",
+        "start": "2019-02-14 08:58:18",
+        "end": "2019-02-14 08:58:18",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -125,7 +113,7 @@
         "compiler": "GCC 8.2.0",
         "implementation": "CPython",
         "imported_modules": {
-          "cmdint": "1.2.3",
+          "cmdint": "1.2.8",
           "re": "2.2.1",
           "git": "2.1.11",
           "gitdb": "2.0.5",
@@ -175,11 +163,11 @@
           "bumpversion": "0.5.3",
           "bz2file": "0.98",
           "certifi": "2018.11.29",
-          "cffi": "1.11.5",
+          "cffi": "1.12.0",
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.2.4",
+          "cmdint": "1.2.8",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",

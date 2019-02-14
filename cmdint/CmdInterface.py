@@ -36,6 +36,8 @@ class CmdInterface:
     __autocommit_mainfile_repo_done: bool = False
     __immediate_return_on_run_not_necessary: bool = True
     __exit_on_error: bool = True
+    __installer_replacements: list = list()
+    __installer_command_suffix: str = '.sh'
 
     # telegram logging
     __token: str = None
@@ -62,14 +64,13 @@ class CmdInterface:
         self.__options = dict()
         self.__no_key_options = [command]
 
-        self.__installer_replacements = list()
         self.__is_py_function = callable(command)
         self.__py_function_return = None
 
         if not self.__is_py_function:
             command = command.strip()
             if CmdInterface.__use_installer:
-                command += '.sh'
+                command += CmdInterface.__installer_command_suffix
             if len(command) == 0 or which(command) is None:
                 raise OSError('Command not found: ' + command)
 
@@ -337,7 +338,7 @@ class CmdInterface:
 
         run_string = str(self.__no_key_options[0])
         if CmdInterface.__use_installer:
-            run_string += '.sh'
+            run_string += CmdInterface.__installer_command_suffix
 
         for el in self.__no_key_options[1:]:
             run_string += self.__stringify_arg(key=None, arg=el)
@@ -348,7 +349,7 @@ class CmdInterface:
                 run_string += ' ' + self.__stringify_arg(key=key, arg=self.__options[key])
 
         if CmdInterface.__use_installer:
-            for rep in self.__installer_replacements:
+            for rep in CmdInterface.__installer_replacements:
                 run_string = run_string.replace(rep[0], rep[1])
 
         return run_string
@@ -372,21 +373,23 @@ class CmdInterface:
             return str(input)
 
     @staticmethod
-    def set_use_installer(use_installer: bool):
+    def set_use_installer(use_installer: bool, command_suffix: str = '.sh'):
         """
-        Causes the CmdInterface to automatically append ".sh" to your command line tool.
+        Causes the CmdInterface to automatically append the specifed suffix to your command line tool.
         This is only sensible in certain cases, such as when switching between the installer and non-installer version
         of MITK Diffusion cmdapps. In this case you would't want to always change all CmdInterface instances but simply
         set this flag.
         """
         CmdInterface.__use_installer = use_installer
+        CmdInterface.__installer_command_suffix = command_suffix
 
-    def add_installer_replacement(self, v1: str, v2: str):
+    @staticmethod
+    def add_installer_replacement(v1: str, v2: str):
         """
         Simple string replacement in the command to be executed, This replacement is performed only if
         set_use_installer has been set to True.
         """
-        self.__installer_replacements.append((str(v1), str(v2)))
+        CmdInterface.__installer_replacements.append((str(v1), str(v2)))
 
     @staticmethod
     def get_file_hashes(files: list) -> list:

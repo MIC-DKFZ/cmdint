@@ -1,43 +1,35 @@
 [
   {
     "cmd_interface": {
-      "version": "1.2.3",
+      "version": "1.2.8",
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-11 15:39:28 >> echo START",
-        "2019-02-11 15:39:28 >> echo END"
+        "2019-02-14 08:58:31 >> echo START",
+        "2019-02-14 08:58:31 >> echo END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
             "examples/io_file_checking.json",
             "examples/io_file_checking.txt",
             "examples/io_file_checking_copy.txt",
             "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple_with_version.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
             "examples/io_file_checking.json",
             "examples/io_file_checking.txt",
             "examples/io_file_checking_copy.txt",
             "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple_with_version.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         }
       }
     },
@@ -50,7 +42,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "760",
+          "line": "774",
           "function": "run"
         },
         {
@@ -71,8 +63,8 @@
         }
       },
       "time": {
-        "start": "2019-02-11 15:39:28",
-        "end": "2019-02-11 15:39:28",
+        "start": "2019-02-14 08:58:31",
+        "end": "2019-02-14 08:58:31",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -112,7 +104,7 @@
         "compiler": "GCC 8.2.0",
         "implementation": "CPython",
         "imported_modules": {
-          "cmdint": "1.2.3",
+          "cmdint": "1.2.8",
           "re": "2.2.1",
           "git": "2.1.11",
           "gitdb": "2.0.5",
@@ -162,11 +154,11 @@
           "bumpversion": "0.5.3",
           "bz2file": "0.98",
           "certifi": "2018.11.29",
-          "cffi": "1.11.5",
+          "cffi": "1.12.0",
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.2.4",
+          "cmdint": "1.2.8",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",
@@ -311,43 +303,35 @@
   },
   {
     "cmd_interface": {
-      "version": "1.2.3",
+      "version": "1.2.8",
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-11 15:39:28 >> cp START",
-        "2019-02-11 15:39:28 >> cp END"
+        "2019-02-14 08:58:31 >> cp START",
+        "2019-02-14 08:58:31 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
             "examples/io_file_checking.json",
             "examples/io_file_checking.txt",
             "examples/io_file_checking_copy.txt",
             "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple_with_version.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
             "examples/io_file_checking.json",
             "examples/io_file_checking.txt",
             "examples/io_file_checking_copy.txt",
             "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple_with_version.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         }
       }
     },
@@ -360,7 +344,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "760",
+          "line": "774",
           "function": "run"
         },
         {
@@ -380,8 +364,8 @@
         "key_val": {}
       },
       "time": {
-        "start": "2019-02-11 15:39:28",
-        "end": "2019-02-11 15:39:28",
+        "start": "2019-02-14 08:58:31",
+        "end": "2019-02-14 08:58:31",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -428,7 +412,7 @@
         "compiler": "GCC 8.2.0",
         "implementation": "CPython",
         "imported_modules": {
-          "cmdint": "1.2.3",
+          "cmdint": "1.2.8",
           "re": "2.2.1",
           "git": "2.1.11",
           "gitdb": "2.0.5",
@@ -478,11 +462,11 @@
           "bumpversion": "0.5.3",
           "bz2file": "0.98",
           "certifi": "2018.11.29",
-          "cffi": "1.11.5",
+          "cffi": "1.12.0",
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.2.4",
+          "cmdint": "1.2.8",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",
@@ -627,44 +611,36 @@
   },
   {
     "cmd_interface": {
-      "version": "1.2.3",
+      "version": "1.2.8",
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-11 15:39:28 >> cp START",
+        "2019-02-14 08:58:31 >> cp START",
         "Skipping execution. All output files already present.",
-        "2019-02-11 15:39:28 >> cp END"
+        "2019-02-14 08:58:31 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
             "examples/io_file_checking.json",
             "examples/io_file_checking.txt",
             "examples/io_file_checking_copy.txt",
             "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple_with_version.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
             "examples/io_file_checking.json",
             "examples/io_file_checking.txt",
             "examples/io_file_checking_copy.txt",
             "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple_with_version.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         }
       }
     },
@@ -677,7 +653,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "760",
+          "line": "774",
           "function": "run"
         },
         {
@@ -695,8 +671,8 @@
         "key_val": {}
       },
       "time": {
-        "start": "2019-02-11 15:39:28",
-        "end": "2019-02-11 15:39:28",
+        "start": "2019-02-14 08:58:31",
+        "end": "2019-02-14 08:58:31",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -733,7 +709,7 @@
         "compiler": "GCC 8.2.0",
         "implementation": "CPython",
         "imported_modules": {
-          "cmdint": "1.2.3",
+          "cmdint": "1.2.8",
           "re": "2.2.1",
           "git": "2.1.11",
           "gitdb": "2.0.5",
@@ -783,11 +759,11 @@
           "bumpversion": "0.5.3",
           "bz2file": "0.98",
           "certifi": "2018.11.29",
-          "cffi": "1.11.5",
+          "cffi": "1.12.0",
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.2.4",
+          "cmdint": "1.2.8",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",
@@ -932,44 +908,36 @@
   },
   {
     "cmd_interface": {
-      "version": "1.2.3",
+      "version": "1.2.8",
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-11 15:39:28 >> cp START",
+        "2019-02-14 08:58:31 >> cp START",
         "Skipping execution. Input files missing: ['non_existing_file.txt']",
-        "2019-02-11 15:39:28 >> cp END"
+        "2019-02-14 08:58:31 >> cp END"
       ],
       "repositories": {
         "/cmdint/examples": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
             "examples/io_file_checking.json",
             "examples/io_file_checking.txt",
             "examples/io_file_checking_copy.txt",
             "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple_with_version.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty_files": [
-            "cmdint/CmdInterface.py",
-            "examples/call_python_functions.json",
-            "examples/git_repository_logging.json",
             "examples/io_file_checking.json",
             "examples/io_file_checking.txt",
             "examples/io_file_checking_copy.txt",
             "examples/simple.json",
-            "examples/simple_with_version.json",
-            "test/cmdint_tests.py"
+            "examples/simple_with_version.json"
           ],
-          "hash": "2edb1af9336b155c8846c8670a95313748e1a511"
+          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
         }
       }
     },
@@ -982,7 +950,7 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "760",
+          "line": "774",
           "function": "run"
         },
         {
@@ -1000,8 +968,8 @@
         "key_val": {}
       },
       "time": {
-        "start": "2019-02-11 15:39:28",
-        "end": "2019-02-11 15:39:28",
+        "start": "2019-02-14 08:58:31",
+        "end": "2019-02-14 08:58:31",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -1040,7 +1008,7 @@
         "compiler": "GCC 8.2.0",
         "implementation": "CPython",
         "imported_modules": {
-          "cmdint": "1.2.3",
+          "cmdint": "1.2.8",
           "re": "2.2.1",
           "git": "2.1.11",
           "gitdb": "2.0.5",
@@ -1090,11 +1058,11 @@
           "bumpversion": "0.5.3",
           "bz2file": "0.98",
           "certifi": "2018.11.29",
-          "cffi": "1.11.5",
+          "cffi": "1.12.0",
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.2.4",
+          "cmdint": "1.2.8",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",

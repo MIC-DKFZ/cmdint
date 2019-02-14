@@ -42,6 +42,9 @@ class CmdInterface:
     __chat_id: str = None
     __bot: telegram.Bot = None
     __caption: str = None
+    __send_start: bool = True
+    __send_end: bool = True
+    __send_log: bool = True
 
     def __init__(self, command, static_logfile: str = None):
         """
@@ -87,7 +90,12 @@ class CmdInterface:
         CmdInterface.__immediate_return_on_run_not_necessary = do_return
 
     @staticmethod
-    def set_telegram_logger(token: str, chat_id: str, caption: str = None):
+    def set_telegram_logger(token: str,
+                            chat_id: str,
+                            caption: str = None,
+                            send_start_message: bool = True,
+                            send_end_message: bool = True,
+                            send_log_on_end: bool = True):
         """
         Receive telegram messages of your CmdInterface runs. How to get a token and chat_id:
         https://github.com/python-telegram-bot/python-telegram-bot/wiki/Introduction-to-the-API
@@ -96,7 +104,9 @@ class CmdInterface:
         CmdInterface.__chat_id = chat_id
         CmdInterface.__bot = telegram.Bot(token=CmdInterface.__token)
         CmdInterface.__caption = caption
-        CmdInterface.__bot = telegram.Bot(token=token)
+        CmdInterface.__send_start = send_start_message
+        CmdInterface.__send_end = send_end_message
+        CmdInterface.__send_log = send_log_on_end
 
     @staticmethod
     def send_telegram_message(message: str):
@@ -422,6 +432,8 @@ class CmdInterface:
         self.__log['command']['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")
         self.__log['command']['time']['utc_offset'] = time.localtime().tm_gmtoff
         self.log_message(start_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' START')
+        if CmdInterface.__send_start:
+            CmdInterface.send_telegram_message(self.__log['command']['name'] + ' START')
         return start_time
 
     def __log_end(self, start_time: datetime) -> datetime:
@@ -451,7 +463,6 @@ class CmdInterface:
         """
         line = str(line)
         print(line)
-        CmdInterface.send_telegram_message(line)
         self.__log['cmd_interface']['output'].append(str(line))
 
     def __pyfunction_to_log(self):
@@ -798,14 +809,24 @@ class CmdInterface:
             self.log_message('Exiting due to error: ' + str(return_code))
             self.__log['command']['return_code'] = return_code
             self.update_log()
-            CmdInterface.send_telegram_logfile(message='last command: ' + str(self.__no_key_options[0]) +
-                                                       '\nreturn code: ' + str(return_code))
+
+            if CmdInterface.__send_log:
+                CmdInterface.send_telegram_logfile(
+                    message=self.__log['command']['name'] + ' END' + '\n' + self.__return_code_meanings[return_code])
+            elif CmdInterface.__send_end:
+                CmdInterface.send_telegram_message(
+                    message=self.__log['command']['name'] + ' END' + '\n' + self.__return_code_meanings[return_code])
             exit()
 
         self.__log['command']['return_code'] = return_code
         self.update_log()
-        self.__log = CmdLog()
 
-        CmdInterface.send_telegram_logfile(message='last command: ' + str(self.__no_key_options[0]) +
-                                                   '\nreturn code: ' + str(return_code))
+        if CmdInterface.__send_log:
+            CmdInterface.send_telegram_logfile(
+                message=self.__log['command']['name'] + ' END' + '\n' + self.__return_code_meanings[return_code])
+        elif CmdInterface.__send_end:
+            CmdInterface.send_telegram_message(
+                message=self.__log['command']['name'] + ' END' + '\n' + self.__return_code_meanings[return_code])
+
+        self.__log = CmdLog()
         return return_code

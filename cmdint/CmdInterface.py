@@ -113,7 +113,7 @@ class CmdInterface:
         """
         Send message to the previously specified chat_id.
         """
-        if CmdInterface.__bot is not None and os.path.isfile(CmdInterface.__logfile_name):
+        if CmdInterface.__bot is not None:
             try:
                 if CmdInterface.__caption is not None:
                     message = CmdInterface.__caption + ":\n" + message
@@ -433,7 +433,7 @@ class CmdInterface:
         self.__log['command']['time']['utc_offset'] = time.localtime().tm_gmtoff
         self.log_message(start_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' START')
         if CmdInterface.__send_start:
-            CmdInterface.send_telegram_message(self.__log['command']['name'] + ' START')
+            CmdInterface.send_telegram_message('START ' + self.__log['command']['name'])
         return start_time
 
     def __log_end(self, start_time: datetime) -> datetime:
@@ -457,13 +457,15 @@ class CmdInterface:
         self.log_message(end_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' END')
         return end_time
 
-    def log_message(self, line):
+    def log_message(self, message: str, via_telegram: bool = False):
         """
         Store string in log (['cmd_interface']['output']).
         """
-        line = str(line)
-        print(line)
-        self.__log['cmd_interface']['output'].append(str(line))
+        message = str(message)
+        print(message)
+        self.__log['cmd_interface']['output'].append(message)
+        if via_telegram:
+            CmdInterface.send_telegram_message(message)
 
     def __pyfunction_to_log(self):
         """
@@ -812,10 +814,10 @@ class CmdInterface:
 
             if CmdInterface.__send_log:
                 CmdInterface.send_telegram_logfile(
-                    message=self.__log['command']['name'] + ' END' + '\n' + self.__return_code_meanings[return_code])
+                    message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
             elif CmdInterface.__send_end:
                 CmdInterface.send_telegram_message(
-                    message=self.__log['command']['name'] + ' END' + '\n' + self.__return_code_meanings[return_code])
+                    message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
             exit()
 
         self.__log['command']['return_code'] = return_code
@@ -823,10 +825,10 @@ class CmdInterface:
 
         if CmdInterface.__send_log:
             CmdInterface.send_telegram_logfile(
-                message=self.__log['command']['name'] + ' END' + '\n' + self.__return_code_meanings[return_code])
+                message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
         elif CmdInterface.__send_end:
             CmdInterface.send_telegram_message(
-                message=self.__log['command']['name'] + ' END' + '\n' + self.__return_code_meanings[return_code])
+                message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
 
         self.__log = CmdLog()
         return return_code

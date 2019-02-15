@@ -2,13 +2,13 @@ from cmdint import CmdInterface
 import os
 
 # remove some files that are created in this script
-if os.path.isfile('io_file_checking.txt'):
-    os.remove('io_file_checking.txt')
-if os.path.isfile('io_file_checking_copy.txt'):
-    os.remove('io_file_checking_copy.txt')
+if os.path.isfile('io_file_logging.txt'):
+    os.remove('io_file_logging.txt')
+if os.path.isfile('io_file_logging_copy.txt'):
+    os.remove('io_file_logging_copy.txt')
 
 # set output logfile and tell CmdInterface to delete a potentially present old logfile
-CmdInterface.set_static_logfile('io_file_checking.json', delete_existing=True)
+CmdInterface.set_static_logfile('io_file_logging.json', delete_existing=True)
 
 # we want to log if a run is not necessary. by default this is disabled since we don't want to swamp our
 # logfile if we call the script multiple times
@@ -30,7 +30,7 @@ step1.add_arg(arg='unus ignis quis vir multum ab audere')
 # (logged under: ['command']['output']['missing']).
 # If it is found, the run is successful and the file hash is logged to enable unique identification
 # (logged under ['command']['output']['found']).
-step1.add_arg(key='>', arg='io_file_checking.txt', check_output=True)
+step1.add_arg(key='>', arg='io_file_logging.txt', check_output=True)
 step1.run()
 
 ####################################################################################################
@@ -42,8 +42,8 @@ step2 = CmdInterface('cp')
 # (logged under: ['command']['input']['missing']).
 # If it is found, the run is started and the file hash is logged to enable unique identification
 # (logged under ['command']['input']['found']).
-step2.add_arg(arg='io_file_checking.txt', check_input=True)
-step2.add_arg(arg='io_file_checking_copy.txt', check_output=True)
+step2.add_arg(arg='io_file_logging.txt', check_input=True)
+step2.add_arg(arg='io_file_logging_copy.txt', check_output=True)
 step2.run()
 
 ####################################################################################################
@@ -58,4 +58,4 @@ step3.add_arg(arg='non_existing_file_copy.txt', check_output=True)
 step3.run()
 
 # anonymize logfile
-CmdInterface.anonymize_log(out_log_name='io_file_checking.json')
+CmdInterface.anonymize_log(out_log_name='io_file_logging.json')

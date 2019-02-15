@@ -11,7 +11,7 @@ To avoid such a situation, this python package enables detailed logging of comma
 CmdInterface wraps your command line or python function calls in a few lines of code and logs everything you might need to reproduce the experiment later on or to simply check what you did a couple of years ago.
 
 * [Features](#Features)
-* [Minimal example](#Minimal example)
+* [Examples](#Examples)
 * [Installation](#Installation)
 
 #### Features:
@@ -30,8 +30,9 @@ CmdInterface wraps your command line or python function calls in a few lines of 
 * Notifications via telegram messenger
 
 
-#### Minimal example 
-How to log a command and what the log looks like (much more in the examples folder):
+#### Examples 
+This is a minimal example how to log a command and what the log looks like.
+ More and more complex examples can be in the [examples folder](https://github.com/MIC-DKFZ/cmdint/tree/master/examples).
 ```
 # Import our logging module
 from cmdint import CmdInterface
@@ -40,7 +41,7 @@ from cmdint import CmdInterface
 test = CmdInterface('ls')
 
 # add keyword based argument
-test.add_arg(key='-l', arg='/')
+test.add_arg(key='-l', arg='~/cmdint/')
 
 # run command
 test.run()

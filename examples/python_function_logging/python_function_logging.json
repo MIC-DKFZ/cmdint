@@ -5,31 +5,59 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-14 08:58:44 >> my_python_function START",
-        "2019-02-14 08:58:44 >> my_python_function END"
+        "2019-02-15 09:54:26 >> my_python_function START",
+        "2019-02-15 09:54:26 >> my_python_function END"
       ],
       "repositories": {
-        "/cmdint/examples": {
+        "/cmdint/examples/python_function_logging": {
           "autocommit": false,
           "dirty_files": [
+            "examples/call_python_functions.ipynb",
             "examples/call_python_functions.json",
+            "examples/call_python_functions.py",
+            "examples/git_repository_logging.ipynb",
             "examples/git_repository_logging.json",
+            "examples/git_repository_logging.py",
+            "examples/io_file_checking.ipynb",
             "examples/io_file_checking.json",
+            "examples/io_file_checking.py",
+            "examples/io_file_checking.txt",
+            "examples/io_file_checking_copy.txt",
+            "examples/minimal.ipynb",
+            "examples/minimal.py",
+            "examples/simple.ipynb",
             "examples/simple.json",
-            "examples/simple_with_version.json"
+            "examples/simple.py",
+            "examples/simple_with_version.json",
+            "examples/telegram_logging.ipynb",
+            "examples/telegram_logging.py"
           ],
-          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
+          "hash": "4eff3b574dc42d59dd49c8c603ebdff339a45965"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty_files": [
+            "examples/call_python_functions.ipynb",
             "examples/call_python_functions.json",
+            "examples/call_python_functions.py",
+            "examples/git_repository_logging.ipynb",
             "examples/git_repository_logging.json",
+            "examples/git_repository_logging.py",
+            "examples/io_file_checking.ipynb",
             "examples/io_file_checking.json",
+            "examples/io_file_checking.py",
+            "examples/io_file_checking.txt",
+            "examples/io_file_checking_copy.txt",
+            "examples/minimal.ipynb",
+            "examples/minimal.py",
+            "examples/simple.ipynb",
             "examples/simple.json",
-            "examples/simple_with_version.json"
+            "examples/simple.py",
+            "examples/simple_with_version.json",
+            "examples/telegram_logging.ipynb",
+            "examples/telegram_logging.py"
           ],
-          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
+          "hash": "4eff3b574dc42d59dd49c8c603ebdff339a45965"
         }
       }
     },
@@ -42,11 +70,11 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "774",
+          "line": "777",
           "function": "run"
         },
         {
-          "file": "/cmdint/examples/call_python_functions.py",
+          "file": "/cmdint/examples/python_function_logging/python_function_logging.py",
           "line": "26",
           "function": "<module>"
         }
@@ -71,8 +99,8 @@
         }
       },
       "time": {
-        "start": "2019-02-14 08:58:44",
-        "end": "2019-02-14 08:58:44",
+        "start": "2019-02-15 09:54:26",
+        "end": "2019-02-15 09:54:26",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -159,7 +187,6 @@
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.2.8",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",
@@ -308,31 +335,59 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-14 08:58:44 >> my_python_function_with_progress START",
-        "2019-02-14 08:58:54 >> my_python_function_with_progress END"
+        "2019-02-15 09:54:26 >> my_python_function_with_progress START",
+        "2019-02-15 09:54:36 >> my_python_function_with_progress END"
       ],
       "repositories": {
-        "/cmdint/examples": {
+        "/cmdint/examples/python_function_logging": {
           "autocommit": false,
           "dirty_files": [
+            "examples/call_python_functions.ipynb",
             "examples/call_python_functions.json",
+            "examples/call_python_functions.py",
+            "examples/git_repository_logging.ipynb",
             "examples/git_repository_logging.json",
+            "examples/git_repository_logging.py",
+            "examples/io_file_checking.ipynb",
             "examples/io_file_checking.json",
+            "examples/io_file_checking.py",
+            "examples/io_file_checking.txt",
+            "examples/io_file_checking_copy.txt",
+            "examples/minimal.ipynb",
+            "examples/minimal.py",
+            "examples/simple.ipynb",
             "examples/simple.json",
-            "examples/simple_with_version.json"
+            "examples/simple.py",
+            "examples/simple_with_version.json",
+            "examples/telegram_logging.ipynb",
+            "examples/telegram_logging.py"
           ],
-          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
+          "hash": "4eff3b574dc42d59dd49c8c603ebdff339a45965"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty_files": [
+            "examples/call_python_functions.ipynb",
             "examples/call_python_functions.json",
+            "examples/call_python_functions.py",
+            "examples/git_repository_logging.ipynb",
             "examples/git_repository_logging.json",
+            "examples/git_repository_logging.py",
+            "examples/io_file_checking.ipynb",
             "examples/io_file_checking.json",
+            "examples/io_file_checking.py",
+            "examples/io_file_checking.txt",
+            "examples/io_file_checking_copy.txt",
+            "examples/minimal.ipynb",
+            "examples/minimal.py",
+            "examples/simple.ipynb",
             "examples/simple.json",
-            "examples/simple_with_version.json"
+            "examples/simple.py",
+            "examples/simple_with_version.json",
+            "examples/telegram_logging.ipynb",
+            "examples/telegram_logging.py"
           ],
-          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
+          "hash": "4eff3b574dc42d59dd49c8c603ebdff339a45965"
         }
       }
     },
@@ -345,11 +400,11 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "774",
+          "line": "777",
           "function": "run"
         },
         {
-          "file": "/cmdint/examples/call_python_functions.py",
+          "file": "/cmdint/examples/python_function_logging/python_function_logging.py",
           "line": "31",
           "function": "<module>"
         }
@@ -365,8 +420,8 @@
         "key_val": {}
       },
       "time": {
-        "start": "2019-02-14 08:58:44",
-        "end": "2019-02-14 08:58:54",
+        "start": "2019-02-15 09:54:26",
+        "end": "2019-02-15 09:54:36",
         "duration": "0:00:10",
         "utc_offset": 3600
       },
@@ -453,7 +508,6 @@
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.2.8",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",

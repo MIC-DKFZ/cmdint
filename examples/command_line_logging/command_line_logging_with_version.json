@@ -5,23 +5,59 @@
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-14 08:58:18 >> ls START",
-        "2019-02-14 08:58:18 >> ls END"
+        "2019-02-15 09:54:54 >> ls START",
+        "2019-02-15 09:54:54 >> ls END"
       ],
       "repositories": {
-        "/cmdint/examples": {
+        "/cmdint/examples/command_line_logging": {
           "autocommit": false,
           "dirty_files": [
-            "examples/simple.json"
+            "examples/call_python_functions.ipynb",
+            "examples/call_python_functions.json",
+            "examples/call_python_functions.py",
+            "examples/git_repository_logging.ipynb",
+            "examples/git_repository_logging.json",
+            "examples/git_repository_logging.py",
+            "examples/io_file_checking.ipynb",
+            "examples/io_file_checking.json",
+            "examples/io_file_checking.py",
+            "examples/io_file_checking.txt",
+            "examples/io_file_checking_copy.txt",
+            "examples/minimal.ipynb",
+            "examples/minimal.py",
+            "examples/simple.ipynb",
+            "examples/simple.json",
+            "examples/simple.py",
+            "examples/simple_with_version.json",
+            "examples/telegram_logging.ipynb",
+            "examples/telegram_logging.py"
           ],
-          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
+          "hash": "4eff3b574dc42d59dd49c8c603ebdff339a45965"
         },
         "/cmdint/cmdint": {
           "autocommit": false,
           "dirty_files": [
-            "examples/simple.json"
+            "examples/call_python_functions.ipynb",
+            "examples/call_python_functions.json",
+            "examples/call_python_functions.py",
+            "examples/git_repository_logging.ipynb",
+            "examples/git_repository_logging.json",
+            "examples/git_repository_logging.py",
+            "examples/io_file_checking.ipynb",
+            "examples/io_file_checking.json",
+            "examples/io_file_checking.py",
+            "examples/io_file_checking.txt",
+            "examples/io_file_checking_copy.txt",
+            "examples/minimal.ipynb",
+            "examples/minimal.py",
+            "examples/simple.ipynb",
+            "examples/simple.json",
+            "examples/simple.py",
+            "examples/simple_with_version.json",
+            "examples/telegram_logging.ipynb",
+            "examples/telegram_logging.py"
           ],
-          "hash": "a1083e8625295c0bc3b5b8b4d301cabc4b819c82"
+          "hash": "4eff3b574dc42d59dd49c8c603ebdff339a45965"
         }
       }
     },
@@ -34,11 +70,11 @@
       "call_stack": [
         {
           "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "774",
+          "line": "777",
           "function": "run"
         },
         {
-          "file": "/cmdint/examples/simple.py",
+          "file": "/cmdint/examples/command_line_logging/command_line_logging.py",
           "line": "21",
           "function": "<module>"
         }
@@ -55,8 +91,8 @@
         "drwxr-xr-x   2 root root       4096 Feb 12 11:29 bin",
         "drwxr-xr-x   3 root root       4096 Feb  5 06:38 boot",
         "drwxrwxr-x   2 root root       4096 Jan 29 12:49 cdrom",
-        "drwxr-xr-x  19 root root       4620 Feb 12 11:02 dev",
-        "drwxr-xr-x 132 root root      12288 Feb 14 06:07 etc",
+        "drwxr-xr-x  19 root root       4640 Feb 15 08:29 dev",
+        "drwxr-xr-x 132 root root      12288 Feb 14 15:01 etc",
         "drwxr-xr-x   3 root root       4096 Jan 29 12:50 home",
         "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img -> boot/initrd.img-4.15.0-45-generic",
         "lrwxrwxrwx   1 root root         33 Feb  4 09:00 initrd.img.old -> boot/initrd.img-4.15.0-44-generic",
@@ -65,15 +101,15 @@
         "drwx------   2 root root      16384 Jan 29 12:47 lost+found",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 media",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 mnt",
-        "dr-xr-xr-x 384 root root          0 Feb 12 11:02 proc",
+        "dr-xr-xr-x 385 root root          0 Feb 15 08:29 proc",
         "drwx------   4 root root       4096 Jan 29 13:28 root",
-        "drwxr-xr-x  32 root root       1020 Feb 14 06:07 run",
+        "drwxr-xr-x  30 root root        900 Feb 15 08:29 run",
         "drwxr-xr-x   2 root root      12288 Jan 29 13:01 sbin",
         "drwxr-xr-x  13 root root       4096 Feb 13 10:41 snap",
         "drwxr-xr-x   2 root root       4096 Jul 25  2018 srv",
         "-rw-------   1 root root 2147483648 Jan 29 12:48 swapfile",
-        "dr-xr-xr-x  13 root root          0 Feb 14 08:58 sys",
-        "drwxrwxrwt  23 root root      20480 Feb 14 08:44 tmp",
+        "dr-xr-xr-x  13 root root          0 Feb 15 09:54 sys",
+        "drwxrwxrwt  21 root root      20480 Feb 15 09:54 tmp",
         "drwxr-xr-x  10 root root       4096 Jul 25  2018 usr",
         "drwxr-xr-x  14 root root       4096 Jul 25  2018 var",
         "lrwxrwxrwx   1 root root         30 Feb  4 09:00 vmlinuz -> boot/vmlinuz-4.15.0-45-generic",
@@ -86,8 +122,8 @@
         }
       },
       "time": {
-        "start": "2019-02-14 08:58:18",
-        "end": "2019-02-14 08:58:18",
+        "start": "2019-02-15 09:54:54",
+        "end": "2019-02-15 09:54:54",
         "duration": "0:00:00",
         "utc_offset": 3600
       },
@@ -174,7 +210,6 @@
           "chardet": "3.0.4",
           "chrome-gnome-shell": "0.0.0",
           "Click": "7.0",
-          "cmdint": "1.2.8",
           "colorlover": "0.3.0",
           "command-not-found": "0.3",
           "cryptography": "2.5",

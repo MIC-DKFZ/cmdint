@@ -18,7 +18,7 @@ def my_python_function_with_progress():
 
 
 # set output logfile and tell CmdInterface to delete a potentially present old logfile
-CmdInterface.set_static_logfile('call_python_functions.json', delete_existing=True)
+CmdInterface.set_static_logfile('python_function_logging.json', delete_existing=True)
 
 # create instance of CmdInterface that calls the previously defined python function "my_python_function"
 test_my_python_function = CmdInterface(my_python_function)
@@ -31,4 +31,4 @@ test_my_python_function_with_progress = CmdInterface(my_python_function_with_pro
 test_my_python_function_with_progress.run()
 
 # anonymize logfile
-CmdInterface.anonymize_log(out_log_name='call_python_functions.json')
+CmdInterface.anonymize_log(out_log_name='python_function_logging.json')

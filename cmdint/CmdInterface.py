@@ -101,13 +101,22 @@ class CmdInterface:
         Receive telegram messages of your CmdInterface runs. How to get a token and chat_id:
         https://github.com/python-telegram-bot/python-telegram-bot/wiki/Introduction-to-the-API
         """
-        CmdInterface.__token = token
-        CmdInterface.__chat_id = chat_id
-        CmdInterface.__bot = telegram.Bot(token=CmdInterface.__token)
-        CmdInterface.__caption = caption
-        CmdInterface.__send_start = send_start_message
-        CmdInterface.__send_end = send_end_message
-        CmdInterface.__send_log = send_log_on_end
+        if token is None or chat_id is None:
+            CmdInterface.__token = None
+            CmdInterface.__chat_id = None
+            CmdInterface. __bot = None
+            CmdInterface.__caption = None
+            CmdInterface.__send_start = True
+            CmdInterface.__send_end = True
+            CmdInterface.__send_log = True
+        else:
+            CmdInterface.__token = token
+            CmdInterface.__chat_id = chat_id
+            CmdInterface.__bot = telegram.Bot(token=CmdInterface.__token)
+            CmdInterface.__caption = caption
+            CmdInterface.__send_start = send_start_message
+            CmdInterface.__send_end = send_end_message
+            CmdInterface.__send_log = send_log_on_end
 
     @staticmethod
     def send_telegram_message(message: str):

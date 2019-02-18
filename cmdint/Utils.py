@@ -131,6 +131,7 @@ class ProgressBar:
                 print('*', end='')
             if self.c == self.max:
                 print('*')
+            sys.stdout.flush()
 
 
 class ThreadWithReturn(threading.Thread):

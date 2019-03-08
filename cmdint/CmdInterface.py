@@ -38,6 +38,7 @@ class CmdInterface:
     __exit_on_error: bool = True
     __installer_replacements: list = list()
     __installer_command_suffix: str = '.sh'
+    __print_messages: bool = True
 
     # telegram logging
     __token: str = None
@@ -76,6 +77,10 @@ class CmdInterface:
 
         if not self.__is_py_function and self.__no_key_options[0][:4] == 'Mitk':
             self.add_arg('--version')
+
+    @staticmethod
+    def set_print_messages(do_print: bool):
+        CmdInterface.__print_messages = do_print
 
     @staticmethod
     def set_exit_on_error(do_exit: bool):
@@ -153,7 +158,7 @@ class CmdInterface:
                 print("Could not send file to telegram: " + str(err))
 
     @staticmethod
-    def get_logfile_path() -> str:
+    def get_static_logfile() -> str:
         """
         Return current logfile path.
         """
@@ -474,12 +479,13 @@ class CmdInterface:
         Store string in log (['cmd_interface']['output']).
         """
         message = str(message)
-        print(message)
+        if CmdInterface.__print_messages:
+            print(message)
         self.__log['cmd_interface']['output'].append(message)
         if via_telegram:
             CmdInterface.send_telegram_message(message)
 
-    def __pyfunction_to_log(self):
+    def __pyfunction_to_log(self, silent: bool = False):
         """
         Run python function and store terminal output in log (['command']['text_output']).
         """
@@ -487,6 +493,18 @@ class CmdInterface:
         original_stderr = sys.stderr
         sys.stdout = sys.stderr = out_string = io.StringIO()
         exception = None
+
+        if silent:
+
+            try:
+                self.__no_key_options[0](*self.__no_key_options[1:], **self.__options)
+            except Exception as err:
+                sys.stdout = original_stdout
+                sys.stderr = original_stderr
+                print('Exception: ' + str(err))
+            sys.stdout = original_stdout
+            sys.stderr = original_stderr
+            return
 
         try:
             proc = ThreadWithReturn(target=self.__no_key_options[0],
@@ -508,10 +526,14 @@ class CmdInterface:
             self.__log['command']['text_output'].append(exception)
         self.update_log()
 
-    def __cmd_to_log(self, run_string: str, version_arg: str = None):
+    def __cmd_to_log(self, run_string: str, version_arg: str = None, silent: bool = False):
         """
         Run command line tool and store output in log.
         """
+        if silent:
+            subprocess.call(run_string, shell=True, stdout=open(os.devnull, 'wb'))
+            return
+
         # print version argument if using MITK cmd app or if version arg is specified explicitely
         if version_arg is not None:
             self.__log['command']['text_output'].append('')
@@ -726,7 +748,8 @@ class CmdInterface:
     def run(self, version_arg: str = None,
             pre_command: str = None,
             check_input: list = None,
-            check_output: list = None) -> int:
+            check_output: list = None,
+            silent: bool = False) -> int:
         """Run command and save provenance information.
 
         Keyword arguments:
@@ -737,6 +760,7 @@ class CmdInterface:
                        (optional, list of strings)
         check_output -- check that at least one of the specified files is missing to avoid unnecessary rerun
                         (optional, list of strings)
+        silent -- don't creat log entry for this command
 
         Return codes: 0=not run, 1=run successful, 2=run not necessary, -1=output missing after run, -2=input missing
         """
@@ -784,7 +808,8 @@ class CmdInterface:
         self.__log['command']['run_string'] = run_string
 
         start_time = self.__log_start()
-        self.append_log()
+        if not silent:
+            self.append_log()
 
         if run_necessary and run_possible:
             self.__log['command']['input']['found'] = CmdInterface.get_file_hashes(check_input)
@@ -792,9 +817,11 @@ class CmdInterface:
             try:
                 # run command
                 if self.__is_py_function:
-                    self.__pyfunction_to_log()  # command is python function
+                    self.__pyfunction_to_log(silent=silent)  # command is python function
                 else:
-                    self.__cmd_to_log(run_string=run_string, version_arg=version_arg)  # command is external tool
+                    self.__cmd_to_log(run_string=run_string,
+                                      version_arg=version_arg,
+                                      silent=silent)  # command is external tool
 
                 # check if output was produced as expected
                 missing_output = CmdInterface.check_exist(check_output)
@@ -820,9 +847,10 @@ class CmdInterface:
         self.__log_end(start_time)
 
         if CmdInterface.__exit_on_error and return_code <= 0:
-            self.log_message('Exiting due to error: ' + str(return_code))
+            self.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
             self.__log['command']['return_code'] = return_code
-            self.update_log()
+            if not silent:
+                self.update_log()
 
             if CmdInterface.__send_log:
                 CmdInterface.send_telegram_logfile(
@@ -833,7 +861,8 @@ class CmdInterface:
             exit()
 
         self.__log['command']['return_code'] = return_code
-        self.update_log()
+        if not silent:
+            self.update_log()
 
         if CmdInterface.__send_log:
             CmdInterface.send_telegram_logfile(

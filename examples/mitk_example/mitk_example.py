@@ -15,7 +15,7 @@ converter.add_arg('-i', str(Path.home()) + '/mitk/mitkdata/brain.nrrd', check_in
 converter.add_arg('-o', str(Path.home()) + '/mitk/mitkdata/brain.nii.gz', check_output=True)
 converter.run()
 
-converter.anonymize_log(CmdInterface.get_logfile_path())
+converter.anonymize_log(CmdInterface.get_static_logfile())
 
 # If you are using a downloaded prebuilt version of MITK, call CmdInterface.set_use_installer(True) or
 # directly call MitkFileFormatConverter.sh instead of MitkFileFormatConverter. set_use_installer(True) simply appends

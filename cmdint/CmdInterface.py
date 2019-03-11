@@ -12,7 +12,7 @@ import chardet
 import telegram
 from pathlib import Path
 from shutil import which
-from cmdint.Utils import ThreadWithReturn, CmdLog
+from cmdint.Utils import *
 
 
 class CmdInterface:
@@ -35,8 +35,8 @@ class CmdInterface:
     __autocommit_mainfile_repo: bool = False
     __autocommit_mainfile_repo_done: bool = False
     __immediate_return_on_run_not_necessary: bool = True
-    __exit_on_error: bool = True
-    __throw_on_error: bool = False
+    __exit_on_error: bool = False
+    __throw_on_error: bool = True
     __installer_replacements: list = list()
     __installer_command_suffix: str = '.sh'
     __print_messages: bool = True
@@ -97,13 +97,13 @@ class CmdInterface:
 
     @staticmethod
     def set_exit_on_error(do_exit: bool):
-        """ if True, CmdInterface calls exit() if an error is encountered. Default is True.
+        """ if True, CmdInterface calls exit() if an error is encountered. Default is False.
         """
         CmdInterface.__exit_on_error = do_exit
 
     @staticmethod
     def set_throw_on_error(do_throw: bool):
-        """ if True, CmdInterface throws exception if an error is encountered. Default is False.
+        """ if True, CmdInterface throws exception if an error is encountered. Default is True.
         """
         CmdInterface.__throw_on_error = do_throw
 
@@ -560,9 +560,12 @@ class CmdInterface:
         Run command line tool and store output in log.
         """
         if silent:
-            retval = subprocess.call(run_string, shell=True, stdout=open(os.devnull, 'wb'))
+            retval = subprocess.call(run_string,
+                                     shell=True,
+                                     stdout=open(os.devnull, 'wb'),
+                                     stderr=open(os.devnull, 'wb'))
             if retval != 0:
-                raise Exception('Command line subprocess return value is ' + str(retval))
+                raise OSError(retval, 'Command line subprocess return value is ' + str(retval))
             return
 
         # print version argument if using MITK cmd app or if version arg is specified explicitely
@@ -652,7 +655,7 @@ class CmdInterface:
             self.update_log()
 
         if proc.returncode != 0 and not self.__ignore_cmd_retval:
-            raise Exception('Command line subprocess return value is ' + str(proc.returncode))
+            raise OSError(proc.returncode, 'Command line subprocess return value is ' + str(proc.returncode))
 
     def update_log(self):
         """
@@ -748,6 +751,7 @@ class CmdInterface:
             f_out.close()
         except Exception as err:
             print('Exception: ' + str(err))
+            print(err.args)
 
         try:
             data = list()
@@ -768,6 +772,7 @@ class CmdInterface:
                 json.dump(data, f, indent=2, sort_keys=False)
         except Exception as err:
             print('Exception: ' + str(err))
+            print(err.args)
 
         for file in files_to_clear:
             if os.path.isfile(file):
@@ -783,6 +788,7 @@ class CmdInterface:
                     f_out.close()
                 except Exception as err:
                     print('Exception: ' + str(err))
+                    print(err.args)
 
         for file in files_to_delete:
             if os.path.isfile(file):
@@ -791,6 +797,7 @@ class CmdInterface:
                     os.remove(file)
                 except Exception as err:
                     print('Exception: ' + str(err))
+                    print(err.args)
 
     def run(self, version_arg: str = None,
             pre_command: str = None,
@@ -888,6 +895,7 @@ class CmdInterface:
                     self.log_message('Something went wrong! Expected output files are missing: ' + str(missing_output))
                     self.__log['command']['output']['missing'] = missing_output
                     return_code = -1
+                    exception = MissingOutputError(missing_output)
                 else:
                     # everything went as expected
                     self.__log['command']['output']['found'] = CmdInterface.get_file_hashes(check_output)
@@ -902,6 +910,7 @@ class CmdInterface:
 
         elif not run_possible:
             self.log_message('Skipping execution. Input files missing: ' + str(missing_inputs))
+            exception = MissingInputError(missing_inputs)
 
         # end logging
         self.__log_end(start_time)

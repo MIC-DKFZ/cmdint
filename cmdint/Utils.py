@@ -134,6 +134,16 @@ class ProgressBar:
             sys.stdout.flush()
 
 
+class MissingInputError(Exception):
+    def __init__(self, message):
+        Exception.__init__(self, message)
+
+
+class MissingOutputError(Exception):
+    def __init__(self, message):
+        Exception.__init__(self, message)
+
+
 class ThreadWithReturn(threading.Thread):
     """
     Helper class to run python functions in a separate thread and return it's output.

@@ -36,9 +36,11 @@ class CmdInterface:
     __autocommit_mainfile_repo_done: bool = False
     __immediate_return_on_run_not_necessary: bool = True
     __exit_on_error: bool = True
+    __throw_on_error: bool = False
     __installer_replacements: list = list()
     __installer_command_suffix: str = '.sh'
     __print_messages: bool = True
+    __called: bool = False  # check for recoursion
 
     # telegram logging
     __token: str = None
@@ -68,6 +70,9 @@ class CmdInterface:
         self.__is_py_function = callable(command)
         self.__py_function_return = None
 
+        self.__nested = False
+        self.__ignore_cmd_retval = False
+
         if not self.__is_py_function:
             command = command.strip()
             if CmdInterface.__use_installer:
@@ -78,8 +83,16 @@ class CmdInterface:
         if not self.__is_py_function and self.__no_key_options[0][:4] == 'Mitk':
             self.add_arg('--version')
 
+    def set_ignore_cmd_retval(self, do_ignore: bool):
+        """ if True, the return value of command line calls is ignored. Default is False. In this case,
+        an exception is triggered if the return value is not 0.
+        """
+        self.__ignore_cmd_retval = do_ignore
+
     @staticmethod
     def set_print_messages(do_print: bool):
+        """ if True, every logged message (log_message()) is also printed to stdout. Default is True.
+        """
         CmdInterface.__print_messages = do_print
 
     @staticmethod
@@ -87,6 +100,12 @@ class CmdInterface:
         """ if True, CmdInterface calls exit() if an error is encountered. Default is True.
         """
         CmdInterface.__exit_on_error = do_exit
+
+    @staticmethod
+    def set_throw_on_error(do_throw: bool):
+        """ if True, CmdInterface throws exception if an error is encountered. Default is False.
+        """
+        CmdInterface.__throw_on_error = do_throw
 
     @staticmethod
     def set_immediate_return_on_run_not_necessary(do_return: bool):
@@ -150,7 +169,7 @@ class CmdInterface:
                     if text is None:
                         text = message
                     else:
-                        text += '\n' +  message
+                        text += '\n' + message
                 CmdInterface.__bot.send_document(chat_id=CmdInterface.__chat_id,
                                                  document=open(CmdInterface.__logfile_name, 'rb'),
                                                  caption=text)
@@ -171,6 +190,9 @@ class CmdInterface:
         If the file does not exist, a new one is created automatically.
         Each toplevel entry of a logfile corresponds to one execution of CmdInterface.run
         """
+        if CmdInterface.__called:
+            print('Nested CmdInterface usage. Logfile not set.')
+            return
         CmdInterface.__logfile_name = file
         if file is None:
             return
@@ -492,16 +514,15 @@ class CmdInterface:
         original_stdout = sys.stdout
         original_stderr = sys.stderr
         sys.stdout = sys.stderr = out_string = io.StringIO()
-        exception = None
 
         if silent:
 
             try:
                 self.__no_key_options[0](*self.__no_key_options[1:], **self.__options)
-            except Exception as err:
+            except Exception:
                 sys.stdout = original_stdout
                 sys.stderr = original_stderr
-                print('Exception: ' + str(err))
+                raise
             sys.stdout = original_stdout
             sys.stderr = original_stderr
             return
@@ -512,26 +533,36 @@ class CmdInterface:
                                     kwargs=self.__options)
             proc.start()
             while proc.is_alive():
-                self.__log['command']['text_output'] = out_string.getvalue().split('\n')
-                self.update_log()
-                time.sleep(5)
-            self.__py_function_return = proc.get_retval()
+                if self.__nested:
+                    print(out_string.getvalue(), end='')
+                else:
+                    self.__log['command']['text_output'] = out_string.getvalue().split('\n')
+                    self.update_log()
+                    time.sleep(5)
+            self.__py_function_return, exception = proc.get_retval()
 
         except Exception as err:
-            exception = 'Exception: ' + str(err)
+            exception = err
         sys.stdout = original_stdout
         sys.stderr = original_stderr
-        self.__log['command']['text_output'] = out_string.getvalue().split('\n')
+
+        if self.__nested:
+            print(out_string.getvalue(), end='')
+        else:
+            self.__log['command']['text_output'] = out_string.getvalue().split('\n')
+            self.update_log()
+
         if exception is not None:
-            self.__log['command']['text_output'].append(exception)
-        self.update_log()
+            raise exception
 
     def __cmd_to_log(self, run_string: str, version_arg: str = None, silent: bool = False):
         """
         Run command line tool and store output in log.
         """
         if silent:
-            subprocess.call(run_string, shell=True, stdout=open(os.devnull, 'wb'))
+            retval = subprocess.call(run_string, shell=True, stdout=open(os.devnull, 'wb'))
+            if retval != 0:
+                raise Exception('Command line subprocess return value is ' + str(retval))
             return
 
         # print version argument if using MITK cmd app or if version arg is specified explicitely
@@ -550,24 +581,30 @@ class CmdInterface:
                 if encoding is None:
                     continue
                 c = str(c.decode(encoding))
-                if c == os.linesep or c == '\r':
-                    self.__log['command']['text_output'].append('')
+                if self.__nested:
+                    print(c, end='')
                 else:
-                    self.__log['command']['text_output'][-1] += c
-                    if (datetime.now() - start_time).seconds > 5:
-                        start_time = datetime.now()
-                        self.update_log()
+                    if c == os.linesep or c == '\r':
+                        self.__log['command']['text_output'].append('')
+                    else:
+                        self.__log['command']['text_output'][-1] += c
+                        if (datetime.now() - start_time).seconds > 5:
+                            start_time = datetime.now()
+                            self.update_log()
             res_out = proc.stdout.read()
             encoding = chardet.detect(res_out)['encoding']
             res_out = str(res_out.decode(encoding))
-            if res_out[:2] != os.linesep:
-                temp = res_out.splitlines()
-                self.__log['command']['text_output'][-1] += temp[0]
-                if len(temp) > 1:
-                    self.__log['command']['text_output'] += temp[1:]
+            if self.__nested:
+                print(res_out, end='')
             else:
-                self.__log['command']['text_output'] += res_out.splitlines()
-            self.update_log()
+                if res_out[:2] != os.linesep:
+                    temp = res_out.splitlines()
+                    self.__log['command']['text_output'][-1] += temp[0]
+                    if len(temp) > 1:
+                        self.__log['command']['text_output'] += temp[1:]
+                else:
+                    self.__log['command']['text_output'] += res_out.splitlines()
+                self.update_log()
 
         self.__log['command']['text_output'].append('')
         start_time = datetime.now()
@@ -583,13 +620,16 @@ class CmdInterface:
             if encoding is None:
                 continue
             c = str(c.decode(encoding))
-            if c == os.linesep or c == '\r':
-                self.__log['command']['text_output'].append('')
+            if self.__nested:
+                print(c, end='')
             else:
-                self.__log['command']['text_output'][-1] += c
-                if (datetime.now() - start_time).seconds > 5:
-                    start_time = datetime.now()
-                    self.update_log()
+                if c == os.linesep or c == '\r':
+                    self.__log['command']['text_output'].append('')
+                else:
+                    self.__log['command']['text_output'][-1] += c
+                    if (datetime.now() - start_time).seconds > 5:
+                        start_time = datetime.now()
+                        self.update_log()
 
         res_out = proc.stdout.read()
         if res_out is None:
@@ -598,14 +638,21 @@ class CmdInterface:
         if encoding is None:
             return
         res_out = str(res_out.decode(encoding))
-        if res_out[:2] != os.linesep:
-            temp = res_out.splitlines()
-            self.__log['command']['text_output'][-1] += temp[0]
-            if len(temp) > 1:
-                self.__log['command']['text_output'] += temp[1:]
+
+        if self.__nested:
+            print(res_out, end='')
         else:
-            self.__log['command']['text_output'] += res_out.splitlines()
-        self.update_log()
+            if res_out[:2] != os.linesep:
+                temp = res_out.splitlines()
+                self.__log['command']['text_output'][-1] += temp[0]
+                if len(temp) > 1:
+                    self.__log['command']['text_output'] += temp[1:]
+            else:
+                self.__log['command']['text_output'] += res_out.splitlines()
+            self.update_log()
+
+        if proc.returncode != 0 and not self.__ignore_cmd_retval:
+            raise Exception('Command line subprocess return value is ' + str(proc.returncode))
 
     def update_log(self):
         """
@@ -762,7 +809,8 @@ class CmdInterface:
                         (optional, list of strings)
         silent -- don't creat log entry for this command
 
-        Return codes: 0=not run, 1=run successful, 2=run not necessary, -1=output missing after run, -2=input missing
+        Return codes: 0=not run, 1=run successful, 2=run not necessary,
+                      -1=output missing after run, -2=input missing, -3=exception
         """
         return_code = 0
         if check_input is None:
@@ -773,6 +821,14 @@ class CmdInterface:
         check_output += self.__check_output
         self.__py_function_return = None
 
+        # check if run has been called recoursively (CmdInterface inside of CmdInterface)
+        self.__nested = False
+        user_silent = silent
+        if CmdInterface.__called:
+            silent = True
+            self.__nested = True
+        CmdInterface.__called = True
+
         # check if run is necessary or if output is already present
         run_necessary = False
         if len(check_output) == 0 or len(CmdInterface.check_exist(check_output)) > 0:
@@ -781,6 +837,8 @@ class CmdInterface:
             return_code = 2
             if CmdInterface.__immediate_return_on_run_not_necessary:
                 self.__log = CmdLog()
+                if not self.__nested:
+                    CmdInterface.__called = False
                 return return_code
 
         # check if run is prossible or if input is missing
@@ -811,17 +869,18 @@ class CmdInterface:
         if not silent:
             self.append_log()
 
+        exception = None
         if run_necessary and run_possible:
             self.__log['command']['input']['found'] = CmdInterface.get_file_hashes(check_input)
 
             try:
                 # run command
                 if self.__is_py_function:
-                    self.__pyfunction_to_log(silent=silent)  # command is python function
+                    self.__pyfunction_to_log(silent=user_silent)  # command is python function
                 else:
                     self.__cmd_to_log(run_string=run_string,
                                       version_arg=version_arg,
-                                      silent=silent)  # command is external tool
+                                      silent=user_silent)  # command is external tool
 
                 # check if output was produced as expected
                 missing_output = CmdInterface.check_exist(check_output)
@@ -835,6 +894,7 @@ class CmdInterface:
                     return_code = 1
             except Exception as err:
                 return_code = -3
+                exception = err
                 self.log_message('Exception: ' + str(err))
 
         elif not run_necessary:
@@ -846,7 +906,9 @@ class CmdInterface:
         # end logging
         self.__log_end(start_time)
 
-        if CmdInterface.__exit_on_error and return_code <= 0:
+        if not self.__nested:
+            CmdInterface.__called = False
+        if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
             self.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
             self.__log['command']['return_code'] = return_code
             if not silent:
@@ -858,7 +920,13 @@ class CmdInterface:
             elif CmdInterface.__send_end:
                 CmdInterface.send_telegram_message(
                     message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
-            exit()
+            if CmdInterface.__throw_on_error or self.__nested:
+                if exception is not None:
+                    raise exception
+                else:
+                    raise Exception('Exiting due to error: ' + self.__return_code_meanings[return_code])
+            if CmdInterface.__exit_on_error:
+                exit()
 
         self.__log['command']['return_code'] = return_code
         if not silent:

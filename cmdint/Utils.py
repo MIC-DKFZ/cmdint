@@ -142,11 +142,15 @@ class ThreadWithReturn(threading.Thread):
     def __init__(self, group=None, target=None, name=None, args=(), kwargs=None):
         threading.Thread.__init__(self, group=group, target=target, name=name, args=args, kwargs=kwargs)
         self._return = None
+        self._exception = None
 
     def run(self):
         if self._target is not None:
-            self._return = self._target(*self._args, **self._kwargs)
+            try:
+                self._return = self._target(*self._args, **self._kwargs)
+            except Exception as err:
+                self._exception = err
 
     def get_retval(self):
         threading.Thread.join(self)
-        return self._return
+        return self._return, self._exception

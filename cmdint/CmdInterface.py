@@ -71,13 +71,16 @@ class CmdInterface:
         self.__py_function_return = None
 
         self.__nested = False
+        self.__no_new_log = False
         self.__ignore_cmd_retval = False
+        self.__silent = False
 
         if not self.__is_py_function:
             command = command.strip()
             if CmdInterface.__use_installer:
                 command += CmdInterface.__installer_command_suffix
             if len(command) == 0 or which(command) is None:
+                print('Command not found: ' + command)
                 raise OSError('Command not found: ' + command)
 
         if not self.__is_py_function and self.__no_key_options[0][:4] == 'Mitk':
@@ -257,6 +260,7 @@ class CmdInterface:
             CmdInterface.__git_repos[path]['autocommit'] = autocommit
             CmdInterface.__check_repo(path)
         else:
+            print('"' + path + '" is not a directory')
             raise NotADirectoryError('"' + path + '" is not a directory')
 
     @staticmethod
@@ -310,6 +314,8 @@ class CmdInterface:
                 self.__check_output.remove(self.__options[key])
             del self.__options[key]
         else:
+            print('No argument with specified keyword found! Arguments without keyword cannot be removed. '
+                  'Create a new instance of CmdInterface in this case.')
             raise ValueError('No argument with specified keyword found! Arguments without keyword cannot be removed. '
                              'Create a new instance of CmdInterface in this case.')
 
@@ -333,6 +339,7 @@ class CmdInterface:
             return
         if self.__is_py_function:
             if key is None:
+                print('Only arguments with keyword are allowed when executing python functions!')
                 raise ValueError('Only arguments with keyword are allowed when executing python functions!')
 
         if check_input:
@@ -471,17 +478,19 @@ class CmdInterface:
         self.__log['command']['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")
         self.__log['command']['time']['utc_offset'] = time.localtime().tm_gmtoff
         self.log_message(start_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' START')
-        if CmdInterface.__send_start:
+        if CmdInterface.__send_start and not self.__silent:
             CmdInterface.send_telegram_message('START ' + self.__log['command']['name'])
         return start_time
 
-    def __log_end(self, start_time: datetime) -> datetime:
+    def __log_end(self, start_time: datetime, return_code: int) -> datetime:
         """
         Log end time and duration of command execution:
         ['command']['time']['end']
         ['command']['time']['duration']
         Return end time.
         """
+
+        # set times
         end_time = datetime.now()
         self.__log['command']['time']['end'] = end_time.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -493,7 +502,22 @@ class CmdInterface:
         minutes, seconds = divmod(remainder, 60)
         duration_formatted = '%d:%02d:%02d' % (hours, minutes, seconds)
         self.__log['command']['time']['duration'] = duration_formatted
+
+        # log end messages & return code
         self.log_message(end_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' END')
+        if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
+            self.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
+        self.__log['command']['return_code'] = return_code
+        self.update_log()
+
+        if not self.__silent:
+            if CmdInterface.__send_log:
+                CmdInterface.send_telegram_logfile(
+                    message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
+            elif CmdInterface.__send_end:
+                CmdInterface.send_telegram_message(
+                    message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
+
         return end_time
 
     def log_message(self, message: str, via_telegram: bool = False):
@@ -507,7 +531,7 @@ class CmdInterface:
         if via_telegram:
             CmdInterface.send_telegram_message(message)
 
-    def __pyfunction_to_log(self, silent: bool = False):
+    def __pyfunction_to_log(self):
         """
         Run python function and store terminal output in log (['command']['text_output']).
         """
@@ -515,7 +539,7 @@ class CmdInterface:
         original_stderr = sys.stderr
         sys.stdout = sys.stderr = out_string = io.StringIO()
 
-        if silent:
+        if self.__silent:
 
             try:
                 self.__no_key_options[0](*self.__no_key_options[1:], **self.__options)
@@ -555,11 +579,11 @@ class CmdInterface:
         if exception is not None:
             raise exception
 
-    def __cmd_to_log(self, run_string: str, version_arg: str = None, silent: bool = False):
+    def __cmd_to_log(self, run_string: str, version_arg: str = None):
         """
         Run command line tool and store output in log.
         """
-        if silent:
+        if self.__silent:
             retval = subprocess.call(run_string,
                                      shell=True,
                                      stdout=open(os.devnull, 'wb'),
@@ -661,7 +685,7 @@ class CmdInterface:
         """
         Replace last entry of the json logfile by log of current instance.
         """
-        if CmdInterface.__logfile_name is None:
+        if CmdInterface.__logfile_name is None or self.__no_new_log:
             return
         self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
@@ -682,7 +706,7 @@ class CmdInterface:
         """
         Append log of current instance to the output json file. Creates new json if it does not exist.
         """
-        if CmdInterface.__logfile_name is None:
+        if CmdInterface.__logfile_name is None or self.__no_new_log:
             return
         self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
@@ -830,9 +854,10 @@ class CmdInterface:
 
         # check if run has been called recoursively (CmdInterface inside of CmdInterface)
         self.__nested = False
-        user_silent = silent
+        self.__no_new_log = silent
+        self.__silent = silent
         if CmdInterface.__called:
-            silent = True
+            self.__no_new_log = True
             self.__nested = True
         CmdInterface.__called = True
 
@@ -873,8 +898,7 @@ class CmdInterface:
         self.__log['command']['run_string'] = run_string
 
         start_time = self.__log_start()
-        if not silent:
-            self.append_log()
+        self.append_log()
 
         exception = None
         if run_necessary and run_possible:
@@ -883,11 +907,10 @@ class CmdInterface:
             try:
                 # run command
                 if self.__is_py_function:
-                    self.__pyfunction_to_log(silent=user_silent)  # command is python function
+                    self.__pyfunction_to_log()  # command is python function
                 else:
                     self.__cmd_to_log(run_string=run_string,
-                                      version_arg=version_arg,
-                                      silent=user_silent)  # command is external tool
+                                      version_arg=version_arg)  # command is external tool
 
                 # check if output was produced as expected
                 missing_output = CmdInterface.check_exist(check_output)
@@ -900,10 +923,33 @@ class CmdInterface:
                     # everything went as expected
                     self.__log['command']['output']['found'] = CmdInterface.get_file_hashes(check_output)
                     return_code = 1
+            except MissingOutputError as err:
+                return_code = -1
+                exception = err
+
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                self.log_message('Exception: ' + exc_type.__name__)
+                self.log_message('In file: ' + fname)
+                self.log_message('Line: ' + str(exc_tb.tb_lineno))
+            except MissingInputError as err:
+                return_code = -2
+                exception = err
+
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                self.log_message('Exception: ' + exc_type.__name__)
+                self.log_message('In file: ' + fname)
+                self.log_message('Line: ' + str(exc_tb.tb_lineno))
             except Exception as err:
                 return_code = -3
                 exception = err
-                self.log_message('Exception: ' + str(err))
+
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                self.log_message('Exception: ' + exc_type.__name__)
+                self.log_message('In file: ' + fname)
+                self.log_message('Line: ' + str(exc_tb.tb_lineno))
 
         elif not run_necessary:
             self.log_message('Skipping execution. All output files already present.')
@@ -912,41 +958,20 @@ class CmdInterface:
             self.log_message('Skipping execution. Input files missing: ' + str(missing_inputs))
             exception = MissingInputError(missing_inputs)
 
-        # end logging
-        self.__log_end(start_time)
-
         if not self.__nested:
             CmdInterface.__called = False
-        if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
-            self.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
-            self.__log['command']['return_code'] = return_code
-            if not silent:
-                self.update_log()
 
-            if CmdInterface.__send_log:
-                CmdInterface.send_telegram_logfile(
-                    message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
-            elif CmdInterface.__send_end:
-                CmdInterface.send_telegram_message(
-                    message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
+        # end logging
+        self.__log_end(start_time, return_code=return_code)
+
+        self.__log = CmdLog()
+        if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
             if CmdInterface.__throw_on_error or self.__nested:
                 if exception is not None:
                     raise exception
                 else:
                     raise Exception('Exiting due to error: ' + self.__return_code_meanings[return_code])
-            if CmdInterface.__exit_on_error:
+            elif CmdInterface.__exit_on_error:
                 exit()
 
-        self.__log['command']['return_code'] = return_code
-        if not silent:
-            self.update_log()
-
-        if CmdInterface.__send_log:
-            CmdInterface.send_telegram_logfile(
-                message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
-        elif CmdInterface.__send_end:
-            CmdInterface.send_telegram_message(
-                message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
-
-        self.__log = CmdLog()
         return return_code

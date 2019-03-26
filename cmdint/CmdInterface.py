@@ -4,15 +4,14 @@ from datetime import datetime
 import time
 import git
 import hashlib
-import sys
 import inspect
 import json
 import io
 import chardet
-import telegram
 from pathlib import Path
 from shutil import which
 from cmdint.Utils import *
+import cmdint.MessageLogger as ML
 
 
 class CmdInterface:
@@ -42,11 +41,8 @@ class CmdInterface:
     __print_messages: bool = True
     __called: bool = False  # check for recoursion
 
-    # telegram logging
-    __token: str = None
-    __chat_id: str = None
-    __bot: telegram.Bot = None
-    __caption: str = None
+    # messenger logging
+    __message_logger: ML.MessageLogger = None
     __send_start: bool = True
     __send_end: bool = True
     __send_log: bool = True
@@ -128,56 +124,48 @@ class CmdInterface:
         Receive telegram messages of your CmdInterface runs. How to get a token and chat_id:
         https://github.com/python-telegram-bot/python-telegram-bot/wiki/Introduction-to-the-API
         """
+        CmdInterface.__send_start = send_start_message
+        CmdInterface.__send_end = send_end_message
+        CmdInterface.__send_log = send_log_on_end
         if token is None or chat_id is None:
-            CmdInterface.__token = None
-            CmdInterface.__chat_id = None
-            CmdInterface. __bot = None
-            CmdInterface.__caption = None
-            CmdInterface.__send_start = True
-            CmdInterface.__send_end = True
-            CmdInterface.__send_log = True
+            CmdInterface.__message_logger = None
         else:
-            CmdInterface.__token = token
-            CmdInterface.__chat_id = chat_id
-            CmdInterface.__bot = telegram.Bot(token=CmdInterface.__token)
-            CmdInterface.__caption = caption
-            CmdInterface.__send_start = send_start_message
-            CmdInterface.__send_end = send_end_message
-            CmdInterface.__send_log = send_log_on_end
+            CmdInterface.__message_logger = ML.TelegramMessageLogger(token=token, chat_id=chat_id, caption=caption)
 
     @staticmethod
-    def send_telegram_message(message: str):
+    def set_slack_logger(bot_oauth_token: str,
+                         user_or_channel: str,
+                         caption: str = None,
+                         send_start_message: bool = True,
+                         send_end_message: bool = True,
+                         send_log_on_end: bool = True):
         """
-        Send message to the previously specified chat_id.
+        Receive slack messages of your CmdInterface runs. How to get a bot user OAuth access token:
+        https://api.slack.com/bot-users
         """
-        if CmdInterface.__bot is not None:
-            try:
-                if CmdInterface.__caption is not None:
-                    message = CmdInterface.__caption + ":\n" + message
-                CmdInterface.__bot.send_message(chat_id=CmdInterface.__chat_id, text=message)
-            except Exception as err:
-                print("Could not send message to telegram: " + str(err))
+        CmdInterface.__send_start = send_start_message
+        CmdInterface.__send_end = send_end_message
+        CmdInterface.__send_log = send_log_on_end
+        if bot_oauth_token is None or user_or_channel is None:
+            CmdInterface.__message_logger = None
+        else:
+            CmdInterface.__message_logger = ML.SlackMessageLogger(bot_oauth_token, user_or_channel, caption)
 
     @staticmethod
-    def send_telegram_logfile(message: str = None):
+    def send_message(message: str):
         """
-        Send logfile to the previously specified chat_id.
+        Send message to the specified service (currently slack or telegram is possible)
         """
-        if CmdInterface.__bot is not None and os.path.isfile(CmdInterface.__logfile_name):
-            try:
-                text = None
-                if CmdInterface.__caption is not None:
-                    text = CmdInterface.__caption
-                if message is not None:
-                    if text is None:
-                        text = message
-                    else:
-                        text += '\n' + message
-                CmdInterface.__bot.send_document(chat_id=CmdInterface.__chat_id,
-                                                 document=open(CmdInterface.__logfile_name, 'rb'),
-                                                 caption=text)
-            except Exception as err:
-                print("Could not send file to telegram: " + str(err))
+        if CmdInterface.__message_logger is not None:
+            CmdInterface.__message_logger.send_message(message)
+
+    @staticmethod
+    def send_logfile(message: str = None):
+        """
+        Send logfile to the specified service (currently slack or telegram is possible)
+        """
+        if CmdInterface.__message_logger is not None and os.path.isfile(CmdInterface.__logfile_name):
+            CmdInterface.__message_logger.send_file(file=CmdInterface.get_static_logfile(), message=message)
 
     @staticmethod
     def get_static_logfile() -> str:
@@ -479,7 +467,7 @@ class CmdInterface:
         self.__log['command']['time']['utc_offset'] = time.localtime().tm_gmtoff
         self.log_message(start_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' START')
         if CmdInterface.__send_start and not self.__silent:
-            CmdInterface.send_telegram_message('START ' + self.__log['command']['name'])
+            CmdInterface.send_message('START ' + self.__log['command']['name'])
         return start_time
 
     def __log_end(self, start_time: datetime, return_code: int) -> datetime:
@@ -512,15 +500,15 @@ class CmdInterface:
 
         if not self.__silent:
             if CmdInterface.__send_log:
-                CmdInterface.send_telegram_logfile(
+                CmdInterface.send_logfile(
                     message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
             elif CmdInterface.__send_end:
-                CmdInterface.send_telegram_message(
+                CmdInterface.send_message(
                     message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
 
         return end_time
 
-    def log_message(self, message: str, via_telegram: bool = False):
+    def log_message(self, message: str, via_messenger: bool = False):
         """
         Store string in log (['cmd_interface']['output']).
         """
@@ -528,8 +516,8 @@ class CmdInterface:
         if CmdInterface.__print_messages:
             print(message)
         self.__log['cmd_interface']['output'].append(message)
-        if via_telegram:
-            CmdInterface.send_telegram_message(message)
+        if via_messenger:
+            CmdInterface.send_message(message)
 
     def __pyfunction_to_log(self):
         """

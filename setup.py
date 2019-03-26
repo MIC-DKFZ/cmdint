@@ -11,6 +11,7 @@ setup(name='cmdint',
       packages=['cmdint'],
       install_requires=[
           'python-telegram-bot',
+          'slackclient'
           'GitPython',
           'chardet',
           'psutil'

@@ -43,9 +43,7 @@ class CmdInterface:
 
     # messenger logging
     __message_logger: ML.MessageLogger = None
-    __send_start: bool = True
-    __send_end: bool = True
-    __send_log: bool = True
+    __message_log_level: MessageLogLevel = MessageLogLevel.START_AND_END_MESSAGES
 
     def __init__(self, command, static_logfile: str = None):
         """
@@ -117,16 +115,12 @@ class CmdInterface:
     def set_telegram_logger(token: str,
                             chat_id: str,
                             caption: str = None,
-                            send_start_message: bool = True,
-                            send_end_message: bool = True,
-                            send_log_on_end: bool = True):
+                            log_level: MessageLogLevel = MessageLogLevel.START_AND_END_MESSAGES):
         """
         Receive telegram messages of your CmdInterface runs. How to get a token and chat_id:
         https://github.com/python-telegram-bot/python-telegram-bot/wiki/Introduction-to-the-API
         """
-        CmdInterface.__send_start = send_start_message
-        CmdInterface.__send_end = send_end_message
-        CmdInterface.__send_log = send_log_on_end
+        CmdInterface.__message_log_level = log_level
         if token is None or chat_id is None:
             CmdInterface.__message_logger = None
         else:
@@ -136,16 +130,12 @@ class CmdInterface:
     def set_slack_logger(bot_oauth_token: str,
                          user_or_channel: str,
                          caption: str = None,
-                         send_start_message: bool = True,
-                         send_end_message: bool = True,
-                         send_log_on_end: bool = True):
+                         log_level: MessageLogLevel = MessageLogLevel.START_AND_END_MESSAGES):
         """
         Receive slack messages of your CmdInterface runs. How to get a bot user OAuth access token:
         https://api.slack.com/bot-users
         """
-        CmdInterface.__send_start = send_start_message
-        CmdInterface.__send_end = send_end_message
-        CmdInterface.__send_log = send_log_on_end
+        CmdInterface.__message_log_level = log_level
         if bot_oauth_token is None or user_or_channel is None:
             CmdInterface.__message_logger = None
         else:
@@ -466,7 +456,7 @@ class CmdInterface:
         self.__log['command']['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")
         self.__log['command']['time']['utc_offset'] = time.localtime().tm_gmtoff
         self.log_message(start_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' START')
-        if CmdInterface.__send_start and not self.__silent:
+        if CmdInterface.__message_log_level == MessageLogLevel.START_AND_END_MESSAGES and not self.__silent:
             CmdInterface.send_message('START ' + self.__log['command']['name'])
         return start_time
 
@@ -498,11 +488,13 @@ class CmdInterface:
         self.__log['command']['return_code'] = return_code
         self.update_log()
 
-        if not self.__silent:
-            if CmdInterface.__send_log:
+        if not self.__silent and \
+                CmdInterface.__message_log_level > MessageLogLevel.ONLY_ERRORS or \
+                (CmdInterface.__message_log_level == MessageLogLevel.ONLY_ERRORS and return_code <= 0):
+            if os.path.isfile(CmdInterface.__logfile_name):
                 CmdInterface.send_logfile(
                     message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
-            elif CmdInterface.__send_end:
+            else:
                 CmdInterface.send_message(
                     message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
 

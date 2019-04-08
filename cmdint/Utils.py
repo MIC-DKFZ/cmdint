@@ -6,10 +6,23 @@ import math
 import multiprocessing
 import cmdint
 from psutil import virtual_memory
+from enum import IntEnum
+
 try:
     from pip._internal.operations import freeze
 except ImportError:  # pip < 10.0
     from pip.operations import freeze
+
+
+class MessageLogLevel(IntEnum):
+    """
+    Defines which messages are sent via messenger.
+    """
+
+    NO_AUTOMATIC_MESSAGES = 0  # Only user defined messages are sent
+    ONLY_ERRORS = 1  # Only send message if return value is < 0 as well as user messages. No start and successful end messages.
+    END_MESSAGES = 2  # Always send message if a command has finished. No start messages.
+    START_AND_END_MESSAGES = 3  # Send all messages: start, end and user defined.
 
 
 class CmdLog(dict):
@@ -61,7 +74,7 @@ class CmdLog(dict):
         self['environment']['platform']['version'] = platform.uname().version
         self['environment']['platform']['machine'] = platform.uname().machine
         self['environment']['platform']['logical_cores'] = multiprocessing.cpu_count()
-        self['environment']['platform']['memory_gb'] = virtual_memory().total / (1024**3)
+        self['environment']['platform']['memory_gb'] = virtual_memory().total / (1024 ** 3)
         self['environment']['platform']['node'] = platform.uname().node
         self['environment']['platform']['ip'] = CmdLog.get_local_ip()
         self['environment']['python'] = dict()
@@ -85,9 +98,9 @@ class CmdLog(dict):
     def get_local_ip():
         try:
             return [l for l in (
-            [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [
-                [(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in
-                 [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
+                [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [
+                    [(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in
+                     [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
         except:
             return None
 
@@ -102,7 +115,7 @@ class ProgressBar:
         self.max = max
         self.incr = 1
         if self.max < self.range:
-            self.incr = math.ceil(self.range/self.max)
+            self.incr = math.ceil(self.range / self.max)
             self.max *= self.incr
 
         self.c = 0

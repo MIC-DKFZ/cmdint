@@ -1,5 +1,6 @@
-python-telegram-bot
-slackclient
-GitPython
+xmltodict
 chardet
 psutil
+GitPython
+python-telegram-bot
+slackclient

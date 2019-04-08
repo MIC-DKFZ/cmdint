@@ -10,11 +10,12 @@ setup(name='cmdint',
       license='Apache 2.0',
       packages=['cmdint'],
       install_requires=[
+          'xmltodict',
+          'chardet',
+          'psutil',
           'python-telegram-bot',
           'slackclient',
-          'GitPython',
-          'chardet',
-          'psutil'
+          'GitPython'
       ],
       zip_safe=False,
       classifiers=[

@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PyPI version](https://badge.fury.io/py/cmdint.svg)](https://badge.fury.io/py/cmdint)
 [![Build Status](https://travis-ci.org/MIC-DKFZ/cmdint.svg?branch=master)](https://travis-ci.org/MIC-DKFZ/cmdint)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2562074.svg)](https://doi.org/10.5281/zenodo.2562074)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2633770.svg)](https://doi.org/10.5281/zenodo.2633770)
 
 Intended for people who, at some point, encountered folders with a ton of files of unknown origin that were supposedly generated during some command line or python experiment using an unknown set of parameters and who unsuccessfully tried to reproduce the results or to simply understand what happened.
 

@@ -26,13 +26,14 @@ CmdInterface wraps your command line or python function calls in a few lines of 
     * Git repository information
     * Platform information (operating system, version, number of cpus, memory, ...)
     * Python information (version, modules, ...)
+* Optional tarbal archiving of touched pyhon files
 * Simple usage (no need to write a complicated wrapper class or something similar to run commands/functions in CmdInterface)
-* Notifications via telegram messenger
+* Notifications via telegram or slack messenger
 
 
 #### Examples 
 This is a minimal example how to log a command and what the log looks like.
- More and more complex examples can be in the [examples folder](https://github.com/MIC-DKFZ/cmdint/tree/master/examples).
+ More and more complex examples can be found in the [examples folder](https://github.com/MIC-DKFZ/cmdint/tree/master/examples).
 ```
 # Import our logging module
 from cmdint import CmdInterface

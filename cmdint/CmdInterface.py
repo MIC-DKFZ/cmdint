@@ -12,6 +12,7 @@ from pathlib import Path
 from shutil import which
 from cmdint.Utils import *
 import cmdint.MessageLogger as ML
+import tarfile
 
 
 class CmdInterface:
@@ -23,6 +24,7 @@ class CmdInterface:
 
     # private
     __logfile_name: str = 'CmdInterface.json'
+    __pack_source_files: bool = False
     __git_repos: dict = dict()
     __return_code_meanings: dict = {0: 'not run',
                                     1: 'run successful',
@@ -173,20 +175,29 @@ class CmdInterface:
         return CmdInterface.__logfile_name
 
     @staticmethod
-    def set_static_logfile(file: str, delete_existing: bool = False):
+    def set_static_logfile(file: str, delete_existing: bool = False, pack_source_files: bool = False):
         """
         Set logfile path. Logfiles are stored in json format. Existing logfiles are appended if not specified otherwise.
         If the file does not exist, a new one is created automatically.
         Each toplevel entry of a logfile corresponds to one execution of CmdInterface.run
+
+        If pack_source_files is True, CmdInterface creates a tarball containing the touched python scripts excluding
+        the files in "site-packages".
         """
         if CmdInterface.__called:
             print('Nested CmdInterface usage. Logfile not set.')
             return
         CmdInterface.__logfile_name = file
+        CmdInterface.__pack_source_files = False
         if file is None:
             return
+        CmdInterface.__pack_source_files = pack_source_files
         if delete_existing and os.path.isfile(CmdInterface.__logfile_name):
             os.remove(CmdInterface.__logfile_name)
+
+        if delete_existing and os.path.isfile(CmdInterface.__logfile_name.replace('.json', '.tar')):
+            os.remove(CmdInterface.__logfile_name.replace('.json', '.tar'))
+
         if os.path.dirname(file) != '':
             os.makedirs(os.path.dirname(file), exist_ok=True)
 
@@ -452,6 +463,11 @@ class CmdInterface:
         ['command']['time']['utc_offset']
         Return start time.
         """
+
+        tar = None
+        if CmdInterface.__pack_source_files:
+            tar = tarfile.open(CmdInterface.__logfile_name.replace('.json', '.tar'), "a")
+
         self.__log['command']['call_stack'] = list()
         for frame in inspect.stack()[1:]:
             el = dict()
@@ -459,6 +475,14 @@ class CmdInterface:
             el['line'] = str(frame[2])
             el['function'] = str(frame[3])
             self.__log['command']['call_stack'].append(el)
+
+            if tar is not None and not el['file'].__contains__('site-packages'):
+                file_name = os.path.basename(el['file'])
+                if file_name != 'CmdInterface.py':
+                    tar.add(name=el['file'], arcname=el['file'])
+
+        if tar is not None:
+            tar.close()
 
         start_time = datetime.now()
         self.__log['command']['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")

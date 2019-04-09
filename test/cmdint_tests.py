@@ -87,6 +87,16 @@ class CmdInterfaceTests(unittest.TestCase):
         runner = CmdInterface(nest)
         runner.run(silent=True)
 
+    def test11(self):
+        CmdInterface.set_static_logfile('CmdInterface.json', delete_existing=True, pack_source_files=True)
+        runner = CmdInterface(dummy_func)
+        output = runner.run()
+        self.assertEqual(output, 1)
+        self.assertTrue(os.path.isfile('CmdInterface.json'))
+        self.assertTrue(os.path.isfile('CmdInterface.tar'))
+        os.remove('CmdInterface.json')
+        os.remove('CmdInterface.tar')
+
     # TODO: check logfile contents
 
 

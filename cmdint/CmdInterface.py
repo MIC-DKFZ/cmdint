@@ -119,6 +119,14 @@ class CmdInterface:
         """
         Receive telegram messages of your CmdInterface runs. How to get a token and chat_id:
         https://github.com/python-telegram-bot/python-telegram-bot/wiki/Introduction-to-the-API
+        Steps:
+        1. Search for botfather in the telegram search an start a conversation
+        2. Type /newbot and follow the instructions of BotFather
+        3. Save your token
+        4. Search for your bot in the teegram search and start a conversion. SImply send "hello" or something.
+        5. Get the chat id by browsing the adress
+           https://api.telegram.org/bot[YOUR-TOKEN-HERE-WITHOUT-BRACKETS]/getUpdates
+           The number shown in the field "id" is your chat ID
         """
         CmdInterface.__message_log_level = log_level
         if token is None or chat_id is None:

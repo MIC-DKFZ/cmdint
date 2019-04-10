@@ -941,7 +941,8 @@ class CmdInterface:
 
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.log_message('Exception: ' + exc_type.__name__)
+                self.log_message('Exception type: ' + exc_type.__name__)
+                self.log_message('Exception message: ' + err)
                 self.log_message('In file: ' + fname)
                 self.log_message('Line: ' + str(exc_tb.tb_lineno))
             except MissingInputError as err:
@@ -950,7 +951,8 @@ class CmdInterface:
 
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.log_message('Exception: ' + exc_type.__name__)
+                self.log_message('Exception type: ' + exc_type.__name__)
+                self.log_message('Exception message: ' + err)
                 self.log_message('In file: ' + fname)
                 self.log_message('Line: ' + str(exc_tb.tb_lineno))
             except Exception as err:
@@ -959,7 +961,8 @@ class CmdInterface:
 
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.log_message('Exception: ' + exc_type.__name__)
+                self.log_message('Exception type: ' + exc_type.__name__)
+                self.log_message('Exception message: ' + err)
                 self.log_message('In file: ' + fname)
                 self.log_message('Line: ' + str(exc_tb.tb_lineno))
 

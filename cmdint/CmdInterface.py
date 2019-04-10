@@ -572,7 +572,11 @@ class CmdInterface:
                 if self.__nested:
                     print(out_string.getvalue(), end='')
                 else:
-                    self.__log['command']['text_output'] = out_string.getvalue().split('\n')
+                    text_output = list()
+                    for line in out_string.getvalue().split('\n'):
+                        text_output.append(line.split('\r')[-1])
+
+                    self.__log['command']['text_output'] = text_output
                     self.update_log()
                     time.sleep(5)
             self.__py_function_return, exception = proc.get_retval()

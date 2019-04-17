@@ -636,18 +636,19 @@ class CmdInterface:
                             self.update_log()
             res_out = proc.stdout.read()
             encoding = chardet.detect(res_out)['encoding']
-            res_out = str(res_out.decode(encoding))
-            if self.__nested:
-                print(res_out, end='')
-            else:
-                if res_out[:2] != os.linesep:
-                    temp = res_out.splitlines()
-                    self.__log['command']['text_output'][-1] += temp[0]
-                    if len(temp) > 1:
-                        self.__log['command']['text_output'] += temp[1:]
+            if encoding is not None:
+                res_out = str(res_out.decode(encoding))
+                if self.__nested:
+                    print(res_out, end='')
                 else:
-                    self.__log['command']['text_output'] += res_out.splitlines()
-                self.update_log()
+                    if res_out[:2] != os.linesep:
+                        temp = res_out.splitlines()
+                        self.__log['command']['text_output'][-1] += temp[0]
+                        if len(temp) > 1:
+                            self.__log['command']['text_output'] += temp[1:]
+                    else:
+                        self.__log['command']['text_output'] += res_out.splitlines()
+                    self.update_log()
 
         self.__log['command']['text_output'].append('')
         start_time = datetime.now()

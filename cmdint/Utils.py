@@ -42,6 +42,7 @@ class CmdLog(dict):
         self['command'] = dict()
         self['command']['name'] = None
         self['command']['is_py_function'] = False
+        self['command']['description'] = None
         self['command']['run_string'] = None
         self['command']['return_code'] = 0
         self['command']['return_code_meaning'] = None

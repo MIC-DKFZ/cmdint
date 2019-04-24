@@ -47,7 +47,7 @@ class CmdInterface:
     __message_logger: ML.MessageLogger = None
     __message_log_level: MessageLogLevel = MessageLogLevel.START_AND_END_MESSAGES
 
-    def __init__(self, command, static_logfile: str = None):
+    def __init__(self, command, static_logfile: str = None, description: str = None):
         """
         Create new instance of CmdInterface with the command or python function as parameter.
         """
@@ -70,6 +70,7 @@ class CmdInterface:
         self.__no_new_log = False
         self.__ignore_cmd_retval = False
         self.__silent = False
+        self.__log['command']['description'] = description
 
         if not self.__is_py_function:
             command = command.strip()

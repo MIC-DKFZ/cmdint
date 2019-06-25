@@ -1,4 +1,4 @@
-from slackclient import SlackClient
+from slack import WebClient
 import telegram
 from abc import ABC, abstractmethod
 
@@ -26,7 +26,7 @@ class SlackMessageLogger(MessageLogger):
     def __init__(self, token: str, channel_or_user: str, caption: str = None):
         super().__init__()
 
-        self.slack_client = SlackClient(token=token)
+        self.slack_client = WebClient(token=token)
         self.cid = None
         self.caption = caption
         for el in self.slack_client.api_call("users.list")['members']:

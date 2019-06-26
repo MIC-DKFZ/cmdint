@@ -709,16 +709,23 @@ class CmdInterface:
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
         self.__log['command']['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
         self.__log['command']['options']['key_val'] = CmdInterface.__jsonable(self.__options)
-        data = list()
-        if os.path.isfile(CmdInterface.__logfile_name):
-            with open(CmdInterface.__logfile_name) as f:
-                data = json.load(f)
-        if len(data) == 0:
-            data.append(self.__log)
-        else:
-            data[-1] = self.__log
-        with open(CmdInterface.__logfile_name, 'w') as f:
-            json.dump(data, f, indent=2, sort_keys=False)
+
+        try:
+            data = list()
+            if os.path.isfile(CmdInterface.__logfile_name):
+                with open(CmdInterface.__logfile_name) as f:
+                    data = json.load(f)
+            if len(data) == 0:
+                data.append(self.__log)
+            else:
+                data[-1] = self.__log
+            with open(CmdInterface.__logfile_name, 'w') as f:
+                json.dump(data, f, indent=2, sort_keys=False)
+        except Exception as err:
+            self.log_message('Error accessing logfile: ' + CmdInterface.__logfile_name, True)
+            self.log_message('Exception: ' + str(err), True)
+            self.log_message(err.args, True)
+            self.log_message('Proceeding ...', True)
 
     def append_log(self):
         """
@@ -730,13 +737,20 @@ class CmdInterface:
         self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
         self.__log['command']['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
         self.__log['command']['options']['key_val'] = CmdInterface.__jsonable(self.__options)
-        data = list()
-        if os.path.isfile(CmdInterface.__logfile_name):
-            with open(CmdInterface.__logfile_name) as f:
-                data = json.load(f)
-        data.append(self.__log)
-        with open(CmdInterface.__logfile_name, 'w') as f:
-            json.dump(data, f, indent=2, sort_keys=False)
+
+        try:
+            data = list()
+            if os.path.isfile(CmdInterface.__logfile_name):
+                with open(CmdInterface.__logfile_name) as f:
+                    data = json.load(f)
+            data.append(self.__log)
+            with open(CmdInterface.__logfile_name, 'w') as f:
+                json.dump(data, f, indent=2, sort_keys=False)
+        except Exception as err:
+            self.log_message('Error accessing logfile: ' + CmdInterface.__logfile_name, True)
+            self.log_message('Exception: ' + str(err), True)
+            self.log_message(err.args, True)
+            self.log_message('Proceeding ...', True)
 
     @staticmethod
     def load_log() -> list:
@@ -747,9 +761,14 @@ class CmdInterface:
             return None
 
         log = list()
-        if os.path.isfile(CmdInterface.__logfile_name):
-            with open(CmdInterface.__logfile_name) as f:
-                log = json.load(f)
+
+        try:
+            if os.path.isfile(CmdInterface.__logfile_name):
+                with open(CmdInterface.__logfile_name) as f:
+                    log = json.load(f)
+        except Exception as err:
+            print('Exception: ' + str(err))
+            print(err.args)
 
         return log
 
@@ -783,14 +802,13 @@ class CmdInterface:
             out_log_name = CmdInterface.__logfile_name.replace('.json', '_public.json')
 
         try:
-            f_in = open(CmdInterface.__logfile_name, 'r')
-            file_content = f_in.read()
-            for cl in clear_strings:
-                file_content = file_content.replace(cl, '')
-            f_in.close()
-            f_out = open(out_log_name, 'w')
-            f_out.write(file_content)
-            f_out.close()
+            with open(CmdInterface.__logfile_name, 'r') as f:
+                file_content = f.read()
+                for cl in clear_strings:
+                    file_content = file_content.replace(cl, '')
+
+            with open(out_log_name, 'w') as f:
+                f.write(file_content)
         except Exception as err:
             print('Exception: ' + str(err))
             print(err.args)
@@ -820,14 +838,14 @@ class CmdInterface:
             if os.path.isfile(file):
                 print('Anonymizing ' + file)
                 try:
-                    f_in = open(file, 'r')
-                    file_content = f_in.read()
-                    for cl in clear_strings:
-                        file_content = file_content.replace(cl, '')
-                    f_in.close()
-                    f_out = open(file, 'w')
-                    f_out.write(file_content)
-                    f_out.close()
+                    with open(file, 'r') as f:
+                        file_content = f.read()
+                        for cl in clear_strings:
+                            file_content = file_content.replace(cl, '')
+
+                    with open(file, 'w') as f:
+                        f.write(file_content)
+
                 except Exception as err:
                     print('Exception: ' + str(err))
                     print(err.args)

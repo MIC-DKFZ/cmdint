@@ -42,6 +42,7 @@ class CmdInterface:
     __installer_command_suffix: str = '.sh'
     __print_messages: bool = True
     __called: bool = False  # check for recoursion
+    __logfile_access_lost: bool = False
 
     # messenger logging
     __message_logger: ML.MessageLogger = None
@@ -488,7 +489,7 @@ class CmdInterface:
         start_time = datetime.now()
         self.__log['command']['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")
         self.__log['command']['time']['utc_offset'] = time.localtime().tm_gmtoff
-        self.log_message(start_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' START')
+        self.log_message(self.__log['command']['name'] + ' START')
         if CmdInterface.__message_log_level == MessageLogLevel.START_AND_END_MESSAGES and not self.__silent:
             CmdInterface.send_message('START ' + self.__log['command']['name'])
         return start_time
@@ -515,7 +516,7 @@ class CmdInterface:
         self.__log['command']['time']['duration'] = duration_formatted
 
         # log end messages & return code
-        self.log_message(end_time.strftime("%Y-%m-%d %H:%M:%S") + ' >> ' + self.__log['command']['name'] + ' END')
+        self.log_message(self.__log['command']['name'] + ' END')
         if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
             self.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
         self.__log['command']['return_code'] = return_code
@@ -533,14 +534,25 @@ class CmdInterface:
 
         return end_time
 
-    def log_message(self, message: str, via_messenger: bool = False):
+    def log_message(self, message: str, via_messenger: bool = False, add_time: bool = True):
         """
         Store string in log (['cmd_interface']['output']).
         """
+        log_time = ''
+        if add_time:
+            log_time = datetime.now()
+            log_time = log_time.strftime("%Y-%m-%d %H:%M:%S")
+
         message = str(message)
         if CmdInterface.__print_messages:
-            print(message)
-        self.__log['cmd_interface']['output'].append(message)
+            if add_time:
+                print(log_time + ' >> ' + message)
+            else:
+                print(message)
+        if add_time:
+            self.__log['cmd_interface']['output'].append([log_time] + message.splitlines())
+        else:
+            self.__log['cmd_interface']['output'].append(message.splitlines())
         if via_messenger:
             CmdInterface.send_message(message)
 
@@ -721,11 +733,23 @@ class CmdInterface:
                 data[-1] = self.__log
             with open(CmdInterface.__logfile_name, 'w') as f:
                 json.dump(data, f, indent=2, sort_keys=False)
+            if CmdInterface.__logfile_access_lost:
+                lm = CmdInterface.__print_messages
+                CmdInterface.__print_messages = False
+                self.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
+                CmdInterface.__print_messages = lm
+            CmdInterface.__logfile_access_lost = False
         except Exception as err:
-            self.log_message('Error accessing logfile: ' + CmdInterface.__logfile_name, True)
-            self.log_message('Exception: ' + str(err), True)
-            self.log_message(err.args, True)
-            self.log_message('Proceeding ...', True)
+            if not CmdInterface.__logfile_access_lost:
+                error_string = 'Error accessing logfile: ' + CmdInterface.__logfile_name
+                error_string += '\n\nException: ' + str(err)
+                error_string += '\n\nArgs: ' + str(err.args)
+                error_string += '\nProceeding ...'
+                lm = CmdInterface.__print_messages
+                CmdInterface.__print_messages = False
+                self.log_message(error_string, True)
+                CmdInterface.__print_messages = lm
+            CmdInterface.__logfile_access_lost = True
 
     def append_log(self):
         """
@@ -746,11 +770,23 @@ class CmdInterface:
             data.append(self.__log)
             with open(CmdInterface.__logfile_name, 'w') as f:
                 json.dump(data, f, indent=2, sort_keys=False)
+            if CmdInterface.__logfile_access_lost:
+                lm = CmdInterface.__print_messages
+                CmdInterface.__print_messages = False
+                self.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
+                CmdInterface.__print_messages = lm
+            CmdInterface.__logfile_access_lost = False
         except Exception as err:
-            self.log_message('Error accessing logfile: ' + CmdInterface.__logfile_name, True)
-            self.log_message('Exception: ' + str(err), True)
-            self.log_message(err.args, True)
-            self.log_message('Proceeding ...', True)
+            if not CmdInterface.__logfile_access_lost:
+                error_string = 'Error accessing logfile: ' + CmdInterface.__logfile_name
+                error_string += '\n\nException: ' + str(err)
+                error_string += '\n\nArgs: ' + str(err.args)
+                error_string += '\nProceeding ...'
+                lm = CmdInterface.__print_messages
+                CmdInterface.__print_messages = False
+                self.log_message(error_string, True)
+                CmdInterface.__print_messages = lm
+            CmdInterface.__logfile_access_lost = True
 
     @staticmethod
     def load_log() -> list:
@@ -965,30 +1001,33 @@ class CmdInterface:
 
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.log_message('Exception type: ' + exc_type.__name__)
-                self.log_message('Exception message: ' + str(err))
-                self.log_message('In file: ' + fname)
-                self.log_message('Line: ' + str(exc_tb.tb_lineno))
+                error_string = 'Exception type: ' + exc_type.__name__
+                error_string += '\n\nException message: ' + str(err)
+                error_string += '\n\nIn file: ' + fname
+                error_string += '\nLine: ' + str(exc_tb.tb_lineno)
+                self.log_message(error_string)
             except MissingInputError as err:
                 return_code = -2
                 exception = err
 
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.log_message('Exception type: ' + exc_type.__name__)
-                self.log_message('Exception message: ' + str(err))
-                self.log_message('In file: ' + fname)
-                self.log_message('Line: ' + str(exc_tb.tb_lineno))
+                error_string = 'Exception type: ' + exc_type.__name__
+                error_string += '\n\nException message: ' + str(err)
+                error_string += '\n\nIn file: ' + fname
+                error_string += '\nLine: ' + str(exc_tb.tb_lineno)
+                self.log_message(error_string)
             except Exception as err:
                 return_code = -3
                 exception = err
 
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self.log_message('Exception type: ' + exc_type.__name__)
-                self.log_message('Exception message: ' + str(err))
-                self.log_message('In file: ' + fname)
-                self.log_message('Line: ' + str(exc_tb.tb_lineno))
+                error_string = 'Exception type: ' + exc_type.__name__
+                error_string += '\n\nException message: ' + str(err)
+                error_string += '\n\nIn file: ' + fname
+                error_string += '\nLine: ' + str(exc_tb.tb_lineno)
+                self.log_message(error_string)
 
         elif not run_necessary:
             self.log_message('Skipping execution. All output files already present.')

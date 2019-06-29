@@ -564,27 +564,16 @@ class CmdInterface:
         original_stderr = sys.stderr
         sys.stdout = sys.stderr = out_string = io.StringIO()
 
-        if self.__silent:
-
-            try:
-                self.__no_key_options[0](*self.__no_key_options[1:], **self.__options)
-            except Exception:
-                sys.stdout = original_stdout
-                sys.stderr = original_stderr
-                raise
-            sys.stdout = original_stdout
-            sys.stderr = original_stderr
-            return
-
+        exception = None
         try:
-            proc = ThreadWithReturn(target=self.__no_key_options[0],
-                                    args=self.__no_key_options[1:],
-                                    kwargs=self.__options)
-            proc.start()
-            while proc.is_alive():
-                if self.__nested:
-                    print(out_string.getvalue(), end='')
-                else:
+            if self.__nested or self.__silent:
+                self.__py_function_return = self.__no_key_options[0](*self.__no_key_options[1:], **self.__options)
+            else:
+                proc = ThreadWithReturn(target=self.__no_key_options[0],
+                                        args=self.__no_key_options[1:],
+                                        kwargs=self.__options)
+                proc.start()
+                while proc.is_alive():
                     text_output = list()
                     for line in out_string.getvalue().split('\n'):
                         text_output.append(line.split('\r')[-1])
@@ -592,18 +581,19 @@ class CmdInterface:
                     self.__log['command']['text_output'] = text_output
                     self.update_log()
                     time.sleep(5)
-            self.__py_function_return, exception = proc.get_retval()
+                self.__py_function_return, exception = proc.get_retval()
 
         except Exception as err:
             exception = err
         sys.stdout = original_stdout
         sys.stderr = original_stderr
 
-        if self.__nested:
-            print(out_string.getvalue(), end='')
-        else:
-            self.__log['command']['text_output'] = out_string.getvalue().split('\n')
-            self.update_log()
+        if not self.__silent:
+            if self.__nested:
+                print(out_string.getvalue(), end='')
+            else:
+                self.__log['command']['text_output'] = out_string.getvalue().split('\n')
+                self.update_log()
 
         if exception is not None:
             raise exception

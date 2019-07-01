@@ -41,7 +41,7 @@ class CmdInterface:
     __installer_replacements: list = list()
     __installer_command_suffix: str = '.sh'
     __print_messages: bool = True
-    __called: bool = False  # check for recoursion
+    __called: bool = False  # check for recursion
     __logfile_access_lost: bool = False
 
     # messenger logging
@@ -914,7 +914,7 @@ class CmdInterface:
         check_output += self.__check_output
         self.__py_function_return = None
 
-        # check if run has been called recoursively (CmdInterface inside of CmdInterface)
+        # check if run has been called recursively (CmdInterface inside of CmdInterface)
         self.__nested = False
         self.__no_new_log = silent
         self.__silent = silent

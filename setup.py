@@ -20,7 +20,6 @@ setup(name='cmdint',
       zip_safe=False,
       classifiers=[
           'Programming Language :: Python :: 3',
-          'Operating System :: Unix',
-          'Operating System :: Microsoft :: Windows',
-          'Operating System :: MacOS'
+          'Operating System :: OS Independent',
+          'Development Status :: 5 - Production/Stable'
       ], )

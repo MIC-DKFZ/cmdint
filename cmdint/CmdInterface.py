@@ -13,6 +13,7 @@ from shutil import which
 from cmdint.Utils import *
 import cmdint.MessageLogger as ML
 import tarfile
+import uuid
 
 
 class CmdInterface:
@@ -43,6 +44,7 @@ class CmdInterface:
     __print_messages: bool = True
     __called: bool = False  # check for recursion
     __logfile_access_lost: bool = False
+    __run_id: str = ''
 
     # messenger logging
     __message_logger: ML.MessageLogger = None
@@ -465,10 +467,13 @@ class CmdInterface:
         ['command']['time']['utc_offset']
         Return start time.
         """
+        if len(CmdInterface.__run_id) == 0:
+            CmdInterface.__run_id = str(uuid.uuid4())
+        self.__log['cmd_interface']['run_id'] = CmdInterface.__run_id
 
         tar = None
         if CmdInterface.__pack_source_files:
-            tar = tarfile.open(CmdInterface.__logfile_name.replace('.json', '.tar'), "a")
+            tar = tarfile.open(CmdInterface.__logfile_name.replace('.json', '_' + CmdInterface.__run_id + '.tar'), "a")
 
         self.__log['command']['call_stack'] = list()
         for frame in inspect.stack()[1:]:
@@ -779,18 +784,21 @@ class CmdInterface:
             CmdInterface.__logfile_access_lost = True
 
     @staticmethod
-    def load_log() -> list:
+    def load_log(logfile_name: str = None) -> list:
         """
-        Load the current json logfile and return as list of dicts.
+        Load the current or the specified json logfile and return as list of dicts.
         """
-        if CmdInterface.__logfile_name is None or not os.path.isfile(CmdInterface.__logfile_name):
-            return None
+        if logfile_name is None or not os.path.isfile(logfile_name):
+            if CmdInterface.__logfile_name is not None and os.path.isfile(CmdInterface.__logfile_name):
+                logfile_name = CmdInterface.__logfile_name
+            else:
+                return None
 
         log = list()
 
         try:
-            if os.path.isfile(CmdInterface.__logfile_name):
-                with open(CmdInterface.__logfile_name) as f:
+            if os.path.isfile(logfile_name):
+                with open(logfile_name) as f:
                     log = json.load(f)
         except Exception as err:
             print('Exception: ' + str(err))

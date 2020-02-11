@@ -779,18 +779,21 @@ class CmdInterface:
             CmdInterface.__logfile_access_lost = True
 
     @staticmethod
-    def load_log() -> list:
+    def load_log(logfile_name: str = None) -> list:
         """
-        Load the current json logfile and return as list of dicts.
+        Load the current or the specified json logfile and return as list of dicts.
         """
-        if CmdInterface.__logfile_name is None or not os.path.isfile(CmdInterface.__logfile_name):
-            return None
+        if logfile_name is None or not os.path.isfile(logfile_name):
+            if CmdInterface.__logfile_name is not None and os.path.isfile(CmdInterface.__logfile_name):
+                logfile_name = CmdInterface.__logfile_name
+            else:
+                return None
 
         log = list()
 
         try:
-            if os.path.isfile(CmdInterface.__logfile_name):
-                with open(CmdInterface.__logfile_name) as f:
+            if os.path.isfile(logfile_name):
+                with open(logfile_name) as f:
                     log = json.load(f)
         except Exception as err:
             print('Exception: ' + str(err))

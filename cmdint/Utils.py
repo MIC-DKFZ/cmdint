@@ -38,6 +38,7 @@ class CmdLog(dict):
         self['cmd_interface']['url'] = 'https://github.com/MIC-DKFZ/cmdint/'
         self['cmd_interface']['output'] = list()
         self['cmd_interface']['repositories'] = None
+        self['cmd_interface']['run_id'] = ''
 
         self['command'] = dict()
         self['command']['name'] = None

@@ -54,98 +54,108 @@ Logged information (a bit shortened):
 ```
 [
   {
-    "cmd_interface": {
-      "version": "1.2.8",
+    "run_id": "1588bb37-2eaa-4313-8aba-21a6d339e13b",
+    "tracked_repositories": {
+      "/coding/cmdint/examples/minimal_example": {
+        "autocommit": false,
+        "dirty_files": [
+          "examples/minimal_example/minimal.py"
+        ],
+        "hash": "bf71f45887ca0e2949d64e79e8ec3909e64cf829"
+      }
+    },
+    "source_tarball": null,
+    "cmdint": {
+      "version": "3.0.0",
       "copyright": "Copyright 2018, German Cancer Research Center (DKFZ), Division of Medical Image Computing",
       "url": "https://github.com/MIC-DKFZ/cmdint/",
       "output": [
-        "2019-02-15 11:03:38 >> ls START",
-        "2019-02-15 11:03:38 >> ls END"
-      ],
-      "repositories": {
-        "/cmdint/examples/minimal_example": {
-          "autocommit": false,
-          "dirty_files": [
-            "Readme.md",
-            "examples/minimal_example/minimal.py"
-          ],
-          "hash": "d77d13b1e3646d2cc47c9f00a9b0d7bf74bc2cdb"
-        }
-      }
+        [
+          "2020-02-19 11:35:28",
+          "ls START"
+        ],
+        [
+          "2020-02-19 11:35:29",
+          "ls END"
+        ]
+      ]
     },
-    "command": {
-      "name": "ls",
-      "is_py_function": false,
-      "run_string": "ls -l ~/cmdint/",
-      "return_code": 1,
-      "return_code_meaning": "run successful",
-      "call_stack": [
-        {
-          "file": "/cmdint/cmdint/CmdInterface.py",
-          "line": "777",
-          "function": "run"
+    "commands": [
+      {
+        "name": "ls",
+        "is_py_function": false,
+        "description": null,
+        "run_string": "ls -l",
+        "return_code": 1,
+        "return_code_meaning": "run successful",
+        "call_stack": [
+          {
+            "file": "/coding/cmdint/cmdint/CmdInterface.py",
+            "line": "1007",
+            "function": "run"
+          },
+          {
+            "file": "/coding/cmdint/examples/minimal_example/minimal.py",
+            "line": "13",
+            "function": "<module>"
+          }
+        ],
+        "text_output": [
+          "total 20",
+          "-rw-r--r-- 1 neher neher 9235 Feb 19 11:35 CmdInterface.json",
+          "-rw-r--r-- 1 neher neher 2806 Nov 29 11:17 minimal.ipynb",
+          "-rw-r--r-- 1 neher neher  331 Feb 19 11:35 minimal.py"
+        ],
+        "options": {
+          "no_key": [],
+          "key_val": {
+            "-l": "None"
+          }
         },
-        {
-          "file": "/cmdint/examples/minimal_example/minimal.py",
-          "line": "13",
-          "function": "<module>"
+        "time": {
+          "start": "2020-02-19 11:35:28",
+          "end": "2020-02-19 11:35:29",
+          "duration": "0:00:00",
+          "utc_offset": 3600
+        },
+        "input": {
+          "expected": [],
+          "found": [],
+          "missing": []
+        },
+        "output": {
+          "expected": [],
+          "found": [],
+          "missing": []
         }
-      ],
-      "text_output": [
-        "total 40",
-        "drwxr-xr-x 3 neher neher  4096 Feb 15 09:46 cmdint",
-        "drwxr-xr-x 8 neher neher  4096 Feb 15 09:50 examples",
-        "-rw-r--r-- 1 neher neher 11357 Feb 14 14:31 LICENSE.txt",
-        ...
-      ],
-      "options": {
-        "no_key": [],
-        "key_val": {
-          "-l": "~/cmdint/"
-        }
-      },
-      "time": {
-        "start": "2019-02-15 11:03:38",
-        "end": "2019-02-15 11:03:38",
-        "duration": "0:00:00",
-        "utc_offset": 3600
-      },
-      "input": {
-        "expected": [],
-        "found": [],
-        "missing": []
-      },
-      "output": {
-        "expected": [],
-        "found": [],
-        "missing": []
       }
-    },
+    ],
     "environment": {
       "platform": {
         "system": "Linux",
-        "release": "4.15.0-45-generic",
-        "version": "#48-Ubuntu SMP Tue Jan 29 16:28:13 UTC 2019",
+        "release": "5.3.0-29-generic",
+        "version": "#31-Ubuntu SMP Fri Jan 17 17:27:26 UTC 2020",
         "machine": "x86_64",
         "logical_cores": 16,
-        "memory_gb": 62.77787399291992
+        "memory_gb": 62.680545806884766
       },
       "python": {
-        "version": "3.6.7",
+        "version": "3.7.5",
         "build": [
           "default",
-          "Oct 22 2018 11:32:17"
+          "Nov 20 2019 09:21:52"
         ],
-        "compiler": "GCC 8.2.0",
+        "compiler": "GCC 9.2.1 20191008",
         "implementation": "CPython",
         "imported_modules": {
-          "cmdint": "1.2.8",
+          "cmdint": "3.0.0",
           "re": "2.2.1",
           ...
         },
         "pip_freeze": {
+          "aiohttp": "3.6.2",
           "apturl": "0.5.2",
-          "asn1crypto": "0.24.0",
+          "argparse": "1.4.0",
           ...
         }
       }

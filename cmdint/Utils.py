@@ -25,49 +25,25 @@ class MessageLogLevel(IntEnum):
     START_AND_END_MESSAGES = 3  # Send all messages: start, end and user defined.
 
 
-class CmdLog(dict):
+class RunLog(dict):
     """
-    Log dictionary used to store all logging information captured in CmdInterface.
+    Log dictionary used to store the a list of the individual command logs as well as additional information captured in CmdInterface.
     """
 
-    def __init__(self):
+    def __init__(self, run_id):
         super().__init__()
-        self['cmd_interface'] = dict()
-        self['cmd_interface']['version'] = cmdint.__version__
-        self['cmd_interface']['copyright'] = cmdint.__copyright__
-        self['cmd_interface']['url'] = 'https://github.com/MIC-DKFZ/cmdint/'
-        self['cmd_interface']['output'] = list()
-        self['cmd_interface']['repositories'] = None
-        self['cmd_interface']['run_id'] = ''
 
-        self['command'] = dict()
-        self['command']['name'] = None
-        self['command']['is_py_function'] = False
-        self['command']['description'] = None
-        self['command']['run_string'] = None
-        self['command']['return_code'] = 0
-        self['command']['return_code_meaning'] = None
-        self['command']['call_stack'] = None
-        self['command']['text_output'] = list()
-        self['command']['options'] = dict()
-        self['command']['options']['no_key'] = None
-        self['command']['options']['key_val'] = None
+        self['run_id'] = run_id
+        self['tracked_repositories'] = None
+        self['source_tarball'] = None
 
-        self['command']['time'] = dict()
-        self['command']['time']['start'] = None
-        self['command']['time']['end'] = None
-        self['command']['time']['duration'] = None
-        self['command']['time']['utc_offset'] = None
+        self['cmdint'] = dict()
+        self['cmdint']['version'] = cmdint.__version__
+        self['cmdint']['copyright'] = cmdint.__copyright__
+        self['cmdint']['url'] = 'https://github.com/MIC-DKFZ/cmdint/'
+        self['cmdint']['output'] = list()
 
-        self['command']['input'] = dict()
-        self['command']['input']['expected'] = list()
-        self['command']['input']['found'] = list()
-        self['command']['input']['missing'] = list()
-
-        self['command']['output'] = dict()
-        self['command']['output']['expected'] = list()
-        self['command']['output']['found'] = list()
-        self['command']['output']['missing'] = list()
+        self['commands'] = []
 
         self['environment'] = dict()
         self['environment']['platform'] = dict()
@@ -78,7 +54,7 @@ class CmdLog(dict):
         self['environment']['platform']['logical_cores'] = multiprocessing.cpu_count()
         self['environment']['platform']['memory_gb'] = virtual_memory().total / (1024 ** 3)
         self['environment']['platform']['node'] = platform.uname().node
-        self['environment']['platform']['ip'] = CmdLog.get_local_ip()
+        self['environment']['platform']['ip'] = RunLog.get_local_ip()
         self['environment']['python'] = dict()
         self['environment']['python']['version'] = platform.python_version()
         self['environment']['python']['build'] = platform.python_build()
@@ -105,6 +81,43 @@ class CmdLog(dict):
                      [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
         except:
             return None
+
+
+class CmdLog(dict):
+    """
+    Log dictionary used to store the logging information of one command captured in CmdInterface.
+    """
+
+    def __init__(self):
+        super().__init__()
+
+        self['name'] = None
+        self['is_py_function'] = False
+        self['description'] = None
+        self['run_string'] = None
+        self['return_code'] = 0
+        self['return_code_meaning'] = None
+        self['call_stack'] = None
+        self['text_output'] = list()
+        self['options'] = dict()
+        self['options']['no_key'] = None
+        self['options']['key_val'] = None
+
+        self['time'] = dict()
+        self['time']['start'] = None
+        self['time']['end'] = None
+        self['time']['duration'] = None
+        self['time']['utc_offset'] = None
+
+        self['input'] = dict()
+        self['input']['expected'] = list()
+        self['input']['found'] = list()
+        self['input']['missing'] = list()
+
+        self['output'] = dict()
+        self['output']['expected'] = list()
+        self['output']['found'] = list()
+        self['output']['missing'] = list()
 
 
 class ProgressBar:

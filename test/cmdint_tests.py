@@ -93,9 +93,10 @@ class CmdInterfaceTests(unittest.TestCase):
         output = runner.run()
         self.assertEqual(output, 1)
         self.assertTrue(os.path.isfile('CmdInterface.json'))
-        self.assertTrue(os.path.isfile('CmdInterface.tar'))
+        run_log = CmdInterface.load_log('CmdInterface.json')[-1]
+        self.assertTrue(os.path.isfile(run_log['source_tarball']))
+        os.remove(run_log['source_tarball'])
         os.remove('CmdInterface.json')
-        os.remove('CmdInterface.tar')
 
     # TODO: check logfile contents
 

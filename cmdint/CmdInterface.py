@@ -11,7 +11,7 @@ import chardet
 from pathlib import Path
 from shutil import which
 from cmdint.Utils import *
-import cmdint.MessageLogger as ML
+from cmdint import MessageLogger
 import tarfile
 import uuid
 
@@ -33,21 +33,22 @@ class CmdInterface:
                                     -1: 'output missing after run',
                                     -2: 'input missing',
                                     -3: 'exception'}
-    __use_installer: bool = False
     __autocommit_mainfile_repo: bool = False
     __autocommit_mainfile_repo_done: bool = False
     __immediate_return_on_run_not_necessary: bool = True
     __exit_on_error: bool = False
     __throw_on_error: bool = True
+    __use_installer: bool = False
     __installer_replacements: list = list()
     __installer_command_suffix: str = '.sh'
     __print_messages: bool = True
+    __cmdint_text_output: list = []
     __called: bool = False  # check for recursion
     __logfile_access_lost: bool = False
     __run_id: str = ''
 
     # messenger logging
-    __message_logger: ML.MessageLogger = None
+    __message_logger: MessageLogger.MessageLogger = None
     __message_log_level: MessageLogLevel = MessageLogLevel.START_AND_END_MESSAGES
 
     def __init__(self, command, static_logfile: str = None, description: str = None):
@@ -73,7 +74,7 @@ class CmdInterface:
         self.__no_new_log = False
         self.__ignore_cmd_retval = False
         self.__silent = False
-        self.__log['command']['description'] = description
+        self.__log['description'] = description
 
         if not self.__is_py_function:
             command = command.strip()
@@ -138,7 +139,7 @@ class CmdInterface:
         if token is None or chat_id is None:
             CmdInterface.__message_logger = None
         else:
-            CmdInterface.__message_logger = ML.TelegramMessageLogger(token=token, chat_id=chat_id, caption=caption)
+            CmdInterface.__message_logger = MessageLogger.TelegramMessageLogger(token=token, chat_id=chat_id, caption=caption)
 
     @staticmethod
     def set_slack_logger(bot_oauth_token: str,
@@ -153,7 +154,7 @@ class CmdInterface:
         if bot_oauth_token is None or user_or_channel is None:
             CmdInterface.__message_logger = None
         else:
-            CmdInterface.__message_logger = ML.SlackMessageLogger(bot_oauth_token, user_or_channel, caption)
+            CmdInterface.__message_logger = MessageLogger.SlackMessageLogger(bot_oauth_token, user_or_channel, caption)
 
     @staticmethod
     def send_message(message: str):
@@ -193,14 +194,19 @@ class CmdInterface:
             return
         CmdInterface.__logfile_name = file
         CmdInterface.__pack_source_files = False
+        CmdInterface.__cmdint_text_output = []
         if file is None:
             return
         CmdInterface.__pack_source_files = pack_source_files
+
+        run_logs = CmdInterface.load_log()
+        if run_logs is not None and len(run_logs) > 0:
+            for run in run_logs:
+                if delete_existing and os.path.isfile(run['source_tarball']):
+                    os.remove(run['source_tarball'])
+
         if delete_existing and os.path.isfile(CmdInterface.__logfile_name):
             os.remove(CmdInterface.__logfile_name)
-
-        if delete_existing and os.path.isfile(CmdInterface.__logfile_name.replace('.json', '.tar')):
-            os.remove(CmdInterface.__logfile_name.replace('.json', '.tar'))
 
         if os.path.dirname(file) != '':
             os.makedirs(os.path.dirname(file), exist_ok=True)
@@ -240,6 +246,8 @@ class CmdInterface:
             CmdInterface.add_repo_path(path, autocommit=CmdInterface.__autocommit_mainfile_repo)
         except:
             pass
+
+        # Add git repository of cmdint (if available)
         path = os.path.dirname(__file__)
         try:
             git.Repo(path=path, search_parent_directories=True)
@@ -463,25 +471,24 @@ class CmdInterface:
     def __log_start(self) -> datetime:
         """
         Log start time and timezone (UTC offset in seconds) of command execution:
-        ['command']['time']['start']
-        ['command']['time']['utc_offset']
+        ['time']['start']
+        ['time']['utc_offset']
         Return start time.
         """
         if len(CmdInterface.__run_id) == 0:
             CmdInterface.__run_id = str(uuid.uuid4())
-        self.__log['cmd_interface']['run_id'] = CmdInterface.__run_id
 
         tar = None
         if CmdInterface.__pack_source_files:
             tar = tarfile.open(CmdInterface.__logfile_name.replace('.json', '_' + CmdInterface.__run_id + '.tar'), "a")
 
-        self.__log['command']['call_stack'] = list()
+        self.__log['call_stack'] = list()
         for frame in inspect.stack()[1:]:
             el = dict()
             el['file'] = os.path.abspath(str(frame[1]))
             el['line'] = str(frame[2])
             el['function'] = str(frame[3])
-            self.__log['command']['call_stack'].append(el)
+            self.__log['call_stack'].append(el)
 
             if tar is not None and not el['file'].__contains__('site-packages'):
                 file_name = os.path.basename(el['file'])
@@ -492,24 +499,24 @@ class CmdInterface:
             tar.close()
 
         start_time = datetime.now()
-        self.__log['command']['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")
-        self.__log['command']['time']['utc_offset'] = time.localtime().tm_gmtoff
-        self.log_message(self.__log['command']['name'] + ' START')
+        self.__log['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        self.__log['time']['utc_offset'] = time.localtime().tm_gmtoff
+        CmdInterface.log_message(self.__log['name'] + ' START')
         if CmdInterface.__message_log_level == MessageLogLevel.START_AND_END_MESSAGES and not self.__silent:
-            CmdInterface.send_message('START ' + self.__log['command']['name'])
+            CmdInterface.send_message('START ' + self.__log['name'])
         return start_time
 
     def __log_end(self, start_time: datetime, return_code: int) -> datetime:
         """
         Log end time and duration of command execution:
-        ['command']['time']['end']
-        ['command']['time']['duration']
+        ['time']['end']
+        ['time']['duration']
         Return end time.
         """
 
         # set times
         end_time = datetime.now()
-        self.__log['command']['time']['end'] = end_time.strftime("%Y-%m-%d %H:%M:%S")
+        self.__log['time']['end'] = end_time.strftime("%Y-%m-%d %H:%M:%S")
 
         if start_time is None:
             return
@@ -518,13 +525,13 @@ class CmdInterface:
         hours += duration.days * 24
         minutes, seconds = divmod(remainder, 60)
         duration_formatted = '%d:%02d:%02d' % (hours, minutes, seconds)
-        self.__log['command']['time']['duration'] = duration_formatted
+        self.__log['time']['duration'] = duration_formatted
 
         # log end messages & return code
-        self.log_message(self.__log['command']['name'] + ' END')
+        CmdInterface.log_message(self.__log['name'] + ' END')
         if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
-            self.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
-        self.__log['command']['return_code'] = return_code
+            CmdInterface.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
+        self.__log['return_code'] = return_code
         self.update_log()
 
         if not self.__silent and \
@@ -532,16 +539,17 @@ class CmdInterface:
                 (CmdInterface.__message_log_level == MessageLogLevel.ONLY_ERRORS and return_code <= 0):
             if os.path.isfile(CmdInterface.__logfile_name):
                 CmdInterface.send_logfile(
-                    message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
+                    message='END ' + self.__log['name'] + '\n' + self.__return_code_meanings[return_code])
             else:
                 CmdInterface.send_message(
-                    message='END ' + self.__log['command']['name'] + '\n' + self.__return_code_meanings[return_code])
+                    message='END ' + self.__log['name'] + '\n' + self.__return_code_meanings[return_code])
 
         return end_time
 
-    def log_message(self, message: str, via_messenger: bool = False, add_time: bool = True):
+    @staticmethod
+    def log_message(message: str, via_messenger: bool = False, add_time: bool = True):
         """
-        Store string in log (['cmd_interface']['output']).
+        Store string in log (['cmdint']['output']).
         """
         log_time = ''
         if add_time:
@@ -554,16 +562,17 @@ class CmdInterface:
                 print(log_time + ' >> ' + message)
             else:
                 print(message)
+
         if add_time:
-            self.__log['cmd_interface']['output'].append([log_time] + message.splitlines())
+            CmdInterface.__cmdint_text_output.append([log_time] + message.splitlines())
         else:
-            self.__log['cmd_interface']['output'].append(message.splitlines())
+            CmdInterface.__cmdint_text_output.append(message.splitlines())
         if via_messenger:
             CmdInterface.send_message(message)
 
     def __pyfunction_to_log(self):
         """
-        Run python function and store terminal output in log (['command']['text_output']).
+        Run python function and store terminal output in log (['text_output']).
         """
         original_stdout = sys.stdout
         original_stderr = sys.stderr
@@ -583,7 +592,7 @@ class CmdInterface:
                     for line in out_string.getvalue().split('\n'):
                         text_output.append(line.split('\r')[-1])
 
-                    self.__log['command']['text_output'] = text_output
+                    self.__log['text_output'] = text_output
                     self.update_log()
                     time.sleep(5)
                 self.__py_function_return, exception = proc.get_retval()
@@ -597,7 +606,7 @@ class CmdInterface:
             if self.__nested:
                 print(out_string.getvalue(), end='')
             else:
-                self.__log['command']['text_output'] = out_string.getvalue().split('\n')
+                self.__log['text_output'] = out_string.getvalue().split('\n')
                 self.update_log()
 
         if exception is not None:
@@ -618,7 +627,7 @@ class CmdInterface:
 
         # print version argument if using MITK cmd app or if version arg is specified explicitely
         if version_arg is not None:
-            self.__log['command']['text_output'].append('')
+            self.__log['text_output'].append('')
             start_time = datetime.now()
             proc = subprocess.Popen(self.__no_key_options[0] + ' ' + version_arg,
                                     shell=True,
@@ -636,9 +645,9 @@ class CmdInterface:
                     print(c, end='')
                 else:
                     if c == os.linesep or c == '\r':
-                        self.__log['command']['text_output'].append('')
+                        self.__log['text_output'].append('')
                     else:
-                        self.__log['command']['text_output'][-1] += c
+                        self.__log['text_output'][-1] += c
                         if (datetime.now() - start_time).seconds > 5:
                             start_time = datetime.now()
                             self.update_log()
@@ -651,14 +660,14 @@ class CmdInterface:
                 else:
                     if res_out[:2] != os.linesep:
                         temp = res_out.splitlines()
-                        self.__log['command']['text_output'][-1] += temp[0]
+                        self.__log['text_output'][-1] += temp[0]
                         if len(temp) > 1:
-                            self.__log['command']['text_output'] += temp[1:]
+                            self.__log['text_output'] += temp[1:]
                     else:
-                        self.__log['command']['text_output'] += res_out.splitlines()
+                        self.__log['text_output'] += res_out.splitlines()
                     self.update_log()
 
-        self.__log['command']['text_output'].append('')
+        self.__log['text_output'].append('')
         start_time = datetime.now()
         proc = subprocess.Popen(run_string,
                                 shell=True,
@@ -676,9 +685,9 @@ class CmdInterface:
                 print(c, end='')
             else:
                 if c == os.linesep or c == '\r':
-                    self.__log['command']['text_output'].append('')
+                    self.__log['text_output'].append('')
                 else:
-                    self.__log['command']['text_output'][-1] += c
+                    self.__log['text_output'][-1] += c
                     if (datetime.now() - start_time).seconds > 5:
                         start_time = datetime.now()
                         self.update_log()
@@ -696,42 +705,63 @@ class CmdInterface:
         else:
             if res_out[:2] != os.linesep:
                 temp = res_out.splitlines()
-                self.__log['command']['text_output'][-1] += temp[0]
+                self.__log['text_output'][-1] += temp[0]
                 if len(temp) > 1:
-                    self.__log['command']['text_output'] += temp[1:]
+                    self.__log['text_output'] += temp[1:]
             else:
-                self.__log['command']['text_output'] += res_out.splitlines()
+                self.__log['text_output'] += res_out.splitlines()
             self.update_log()
 
         if proc.returncode != 0 and not self.__ignore_cmd_retval:
             raise OSError(proc.returncode, 'Command line subprocess return value is ' + str(proc.returncode))
 
+    def get_runlogs(self) -> list:
+
+        if CmdInterface.__logfile_name is None or self.__no_new_log:
+            return None
+
+        if len(CmdInterface.__run_id) == 0:
+            CmdInterface.__run_id = str(uuid.uuid4())
+
+        run_logs = []
+        if os.path.isfile(CmdInterface.__logfile_name):
+            with open(CmdInterface.__logfile_name) as f:
+                run_logs = json.load(f)
+
+        if len(run_logs) == 0 or run_logs[-1]['run_id'] != CmdInterface.__run_id:
+            run_logs.append(RunLog(run_id=CmdInterface.__run_id))
+
+        return run_logs
+
     def update_log(self):
         """
         Replace last entry of the json logfile by log of current instance.
         """
-        if CmdInterface.__logfile_name is None or self.__no_new_log:
+        run_logs = self.get_runlogs()
+        if run_logs is None:
             return
-        self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
-        self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
-        self.__log['command']['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
-        self.__log['command']['options']['key_val'] = CmdInterface.__jsonable(self.__options)
+
+        run_logs[-1]['tracked_repositories'] = CmdInterface.__git_repos
+        if CmdInterface.__pack_source_files:
+            run_logs[-1]['source_tarball'] = CmdInterface.__logfile_name.replace('.json', '_' + CmdInterface.__run_id + '.tar')
+        run_logs[-1]['cmdint']['output'] += CmdInterface.__cmdint_text_output
+
+        self.__log['return_code_meaning'] = self.__return_code_meanings[self.__log['return_code']]
+        self.__log['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
+        self.__log['options']['key_val'] = CmdInterface.__jsonable(self.__options)
 
         try:
-            data = list()
-            if os.path.isfile(CmdInterface.__logfile_name):
-                with open(CmdInterface.__logfile_name) as f:
-                    data = json.load(f)
-            if len(data) == 0:
-                data.append(self.__log)
+            if len(run_logs[-1]['commands']) == 0:
+                run_logs[-1]['commands'].append(self.__log)
             else:
-                data[-1] = self.__log
+                run_logs[-1]['commands'][-1] = self.__log
             with open(CmdInterface.__logfile_name, 'w') as f:
-                json.dump(data, f, indent=2, sort_keys=False)
+                json.dump(run_logs, f, indent=2, sort_keys=False)
+            CmdInterface.__cmdint_text_output = []
             if CmdInterface.__logfile_access_lost:
                 lm = CmdInterface.__print_messages
                 CmdInterface.__print_messages = False
-                self.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
+                CmdInterface.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
                 CmdInterface.__print_messages = lm
             CmdInterface.__logfile_access_lost = False
         except Exception as err:
@@ -742,7 +772,7 @@ class CmdInterface:
                 error_string += '\nProceeding ...'
                 lm = CmdInterface.__print_messages
                 CmdInterface.__print_messages = False
-                self.log_message(error_string, True)
+                CmdInterface.log_message(error_string, True)
                 CmdInterface.__print_messages = lm
             CmdInterface.__logfile_access_lost = True
 
@@ -750,25 +780,29 @@ class CmdInterface:
         """
         Append log of current instance to the output json file. Creates new json if it does not exist.
         """
-        if CmdInterface.__logfile_name is None or self.__no_new_log:
+        run_logs = self.get_runlogs()
+        if run_logs is None:
             return
-        self.__log['command']['return_code_meaning'] = self.__return_code_meanings[self.__log['command']['return_code']]
-        self.__log['cmd_interface']['repositories'] = CmdInterface.__git_repos
-        self.__log['command']['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
-        self.__log['command']['options']['key_val'] = CmdInterface.__jsonable(self.__options)
+
+        run_logs[-1]['tracked_repositories'] = CmdInterface.__git_repos
+        if CmdInterface.__pack_source_files:
+            run_logs[-1]['source_tarball'] = CmdInterface.__logfile_name.replace('.json', '_' + CmdInterface.__run_id + '.tar')
+        run_logs[-1]['cmdint']['output'] += CmdInterface.__cmdint_text_output
+
+        self.__log['return_code_meaning'] = self.__return_code_meanings[self.__log['return_code']]
+        self.__log['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
+        self.__log['options']['key_val'] = CmdInterface.__jsonable(self.__options)
+
 
         try:
-            data = list()
-            if os.path.isfile(CmdInterface.__logfile_name):
-                with open(CmdInterface.__logfile_name) as f:
-                    data = json.load(f)
-            data.append(self.__log)
+            run_logs[-1]['commands'].append(self.__log)
             with open(CmdInterface.__logfile_name, 'w') as f:
-                json.dump(data, f, indent=2, sort_keys=False)
+                json.dump(run_logs, f, indent=2, sort_keys=False)
+            CmdInterface.__cmdint_text_output = []
             if CmdInterface.__logfile_access_lost:
                 lm = CmdInterface.__print_messages
                 CmdInterface.__print_messages = False
-                self.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
+                CmdInterface.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
                 CmdInterface.__print_messages = lm
             CmdInterface.__logfile_access_lost = False
         except Exception as err:
@@ -779,7 +813,7 @@ class CmdInterface:
                 error_string += '\nProceeding ...'
                 lm = CmdInterface.__print_messages
                 CmdInterface.__print_messages = False
-                self.log_message(error_string, True)
+                CmdInterface.log_message(error_string, True)
                 CmdInterface.__print_messages = lm
             CmdInterface.__logfile_access_lost = True
 
@@ -831,9 +865,9 @@ class CmdInterface:
             files_to_delete = list()
         clear_strings.append(str(Path.home()))
 
-        print('Anonymizing ' + CmdInterface.__logfile_name)
         if out_log_name is None:
             out_log_name = CmdInterface.__logfile_name.replace('.json', '_public.json')
+        print('Anonymizing ' + CmdInterface.__logfile_name + ' --> ' + out_log_name)
 
         try:
             with open(CmdInterface.__logfile_name, 'r') as f:
@@ -853,15 +887,18 @@ class CmdInterface:
                 with open(out_log_name) as f:
                     data = json.load(f)
             to_remove = list()
-            for log in data:
-                if log['command']['name'] == 'anonymize_log':
-                    to_remove.append(log)
-                    continue
-                del log['environment']['platform']['node']
-                if 'ip' in log['environment']['platform'].keys():
-                    del log['environment']['platform']['ip']
-            for log in to_remove:
-                data.remove(log)
+            for run_log in data:
+                # remove the "anonymize_log" command log in all run logs
+                for cmd_log in run_log['commands']:
+                    if cmd_log['name'] == 'anonymize_log':
+                        to_remove.append(cmd_log)
+                        continue
+                for cmd_log in to_remove:
+                    run_log['commands'].remove(cmd_log)
+                # remove personal environment data
+                del run_log['environment']['platform']['node']
+                if 'ip' in run_log['environment']['platform'].keys():
+                    del run_log['environment']['platform']['ip']
             with open(out_log_name, 'w') as f:
                 json.dump(data, f, indent=2, sort_keys=False)
         except Exception as err:
@@ -946,7 +983,7 @@ class CmdInterface:
         # check if run is prossible or if input is missing
         run_possible = True
         missing_inputs = CmdInterface.check_exist(check_input)
-        self.__log['command']['input']['missing'] = missing_inputs
+        self.__log['input']['missing'] = missing_inputs
         if len(missing_inputs) > 0:
             run_possible = False
             return_code = -2
@@ -958,21 +995,21 @@ class CmdInterface:
             run_string = self.get_run_string()
 
         # start logging
-        self.__log['command']['is_py_function'] = self.__is_py_function
+        self.__log['is_py_function'] = self.__is_py_function
         if self.__is_py_function:
-            self.__log['command']['name'] = str(self.__no_key_options[0].__name__)
+            self.__log['name'] = str(self.__no_key_options[0].__name__)
         else:
-            self.__log['command']['name'] = str(self.__no_key_options[0])
-        self.__log['command']['input']['expected'] = check_input
-        self.__log['command']['output']['expected'] = check_output
-        self.__log['command']['run_string'] = run_string
+            self.__log['name'] = str(self.__no_key_options[0])
+        self.__log['input']['expected'] = check_input
+        self.__log['output']['expected'] = check_output
+        self.__log['run_string'] = run_string
 
         start_time = self.__log_start()
         self.append_log()
 
         exception = None
         if run_necessary and run_possible:
-            self.__log['command']['input']['found'] = CmdInterface.get_file_hashes(check_input)
+            self.__log['input']['found'] = CmdInterface.get_file_hashes(check_input)
 
             try:
                 # run command
@@ -985,13 +1022,13 @@ class CmdInterface:
                 # check if output was produced as expected
                 missing_output = CmdInterface.check_exist(check_output)
                 if len(missing_output) > 0:
-                    self.log_message('Something went wrong! Expected output files are missing: ' + str(missing_output))
-                    self.__log['command']['output']['missing'] = missing_output
+                    CmdInterface.log_message('Something went wrong! Expected output files are missing: ' + str(missing_output))
+                    self.__log['output']['missing'] = missing_output
                     return_code = -1
                     exception = MissingOutputError(missing_output)
                 else:
                     # everything went as expected
-                    self.__log['command']['output']['found'] = CmdInterface.get_file_hashes(check_output)
+                    self.__log['output']['found'] = CmdInterface.get_file_hashes(check_output)
                     return_code = 1
             except MissingOutputError as err:
                 return_code = -1
@@ -1003,7 +1040,7 @@ class CmdInterface:
                 error_string += '\n\nException message: ' + str(err)
                 error_string += '\n\nIn file: ' + fname
                 error_string += '\nLine: ' + str(exc_tb.tb_lineno)
-                self.log_message(error_string)
+                CmdInterface.log_message(error_string)
             except MissingInputError as err:
                 return_code = -2
                 exception = err
@@ -1014,7 +1051,7 @@ class CmdInterface:
                 error_string += '\n\nException message: ' + str(err)
                 error_string += '\n\nIn file: ' + fname
                 error_string += '\nLine: ' + str(exc_tb.tb_lineno)
-                self.log_message(error_string)
+                CmdInterface.log_message(error_string)
             except Exception as err:
                 return_code = -3
                 exception = err
@@ -1025,13 +1062,13 @@ class CmdInterface:
                 error_string += '\n\nException message: ' + str(err)
                 error_string += '\n\nIn file: ' + fname
                 error_string += '\nLine: ' + str(exc_tb.tb_lineno)
-                self.log_message(error_string)
+                CmdInterface.log_message(error_string)
 
         elif not run_necessary:
-            self.log_message('Skipping execution. All output files already present.')
+            CmdInterface.log_message('Skipping execution. All output files already present.')
 
         elif not run_possible:
-            self.log_message('Skipping execution. Input files missing: ' + str(missing_inputs))
+            CmdInterface.log_message('Skipping execution. Input files missing: ' + str(missing_inputs))
             exception = MissingInputError(missing_inputs)
 
         if not self.__nested:

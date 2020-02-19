@@ -12,7 +12,7 @@ The logged git information can be found under ['cmd_interface']['repositories'] 
 
 # If autocommit=True, pending changes in a dirty repo are commited with an automatic commit message.
 # This can be sensible since the logged commit hash otherwise does not capture the full state of the repository.
-CmdInterface.add_repo_path(str(Path.home()) + '/mrtrix3/', autocommit=False)
+CmdInterface.add_repo_path(str(Path.home()) + '/coding/mitk/mitk/', autocommit=False)
 
 CmdInterface.set_static_logfile('git_repository_logging.json', delete_existing=True)
 test = CmdInterface('ls')

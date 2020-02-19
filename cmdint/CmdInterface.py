@@ -202,7 +202,7 @@ class CmdInterface:
         run_logs = CmdInterface.load_log()
         if run_logs is not None and len(run_logs) > 0:
             for run in run_logs:
-                if delete_existing and os.path.isfile(run['source_tarball']):
+                if delete_existing and 'source_tarball' in run.keys() and os.path.isfile(str(run['source_tarball'])):
                     os.remove(run['source_tarball'])
 
         if delete_existing and os.path.isfile(CmdInterface.__logfile_name):

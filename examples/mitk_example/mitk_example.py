@@ -7,6 +7,7 @@ from pathlib import Path
 # Optional. We set this to change the default logfile name to mitk_example for this example script and to overwrite a
 #  potentially existing old logfile instead of appending the new command line call.
 CmdInterface.set_static_logfile(file='mitk_example.json', delete_existing=True)
+CmdInterface.set_throw_on_error(do_throw=False)
 
 # Convert a nrrd image file to a nifti file. Also log input and output file hashes and check if the corresponding
 # files are present before or after the command execution respectively by setting check_input and check_output.

@@ -9,6 +9,7 @@ if os.path.isfile('io_file_logging_copy.txt'):
 
 # set output logfile and tell CmdInterface to delete a potentially present old logfile
 CmdInterface.set_static_logfile('io_file_logging.json', delete_existing=True)
+CmdInterface.set_throw_on_error(do_throw=False)
 
 # we want to log if a run is not necessary. by default this is disabled since we don't want to swamp our
 # logfile if we call the script multiple times

@@ -716,6 +716,9 @@ class CmdInterface:
             raise OSError(proc.returncode, 'Command line subprocess return value is ' + str(proc.returncode))
 
     def get_runlogs(self) -> list:
+        """
+        Load list of run logs and append new run id if necessary.
+        """
 
         if CmdInterface.__logfile_name is None or self.__no_new_log:
             return None
@@ -735,7 +738,7 @@ class CmdInterface:
 
     def update_log(self):
         """
-        Replace last entry of the json logfile by log of current instance.
+        Replace last entry of the command log list in the current run log and write to json.
         """
         run_logs = self.get_runlogs()
         if run_logs is None:
@@ -778,7 +781,7 @@ class CmdInterface:
 
     def append_log(self):
         """
-        Append log of current instance to the output json file. Creates new json if it does not exist.
+        Append command log to the list held in the run log and write to file. Creates new json if it does not exist.
         """
         run_logs = self.get_runlogs()
         if run_logs is None:
@@ -792,7 +795,6 @@ class CmdInterface:
         self.__log['return_code_meaning'] = self.__return_code_meanings[self.__log['return_code']]
         self.__log['options']['no_key'] = CmdInterface.__jsonable(self.__no_key_options[1:])
         self.__log['options']['key_val'] = CmdInterface.__jsonable(self.__options)
-
 
         try:
             run_logs[-1]['commands'].append(self.__log)

@@ -479,11 +479,14 @@ class CmdInterface:
             CmdInterface.__run_id = str(uuid.uuid4())
 
         tar = None
+        packed_files = []
         if CmdInterface.__pack_source_files:
             tar = tarfile.open(CmdInterface.__logfile_name.replace('.json', '_' + CmdInterface.__run_id + '.tar'), "a")
+            packed_files = tar.getnames()
+            for i in range(len(packed_files)):
+                packed_files[i] = '/' + packed_files[i]
 
         self.__log['call_stack'] = list()
-        packed_files = []
         for frame in inspect.stack()[1:]:
             el = dict()
             el['file'] = os.path.abspath(str(frame[1]))
@@ -491,7 +494,7 @@ class CmdInterface:
             el['function'] = str(frame[3])
             self.__log['call_stack'].append(el)
 
-            if tar is not None and not el['file'].__contains__('site-packages') and not el['file'] in packed_files:
+            if tar is not None and not el['file'].__contains__('site-packages') and el['file'] not in packed_files:
                 packed_files.append(el['file'])
                 file_name = os.path.basename(el['file'])
                 if file_name != 'CmdInterface.py':

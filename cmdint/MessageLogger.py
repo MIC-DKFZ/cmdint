@@ -1,4 +1,4 @@
-from slack import WebClient
+from slack.web.client import WebClient
 import telegram
 from abc import ABC, abstractmethod
 

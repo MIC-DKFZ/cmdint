@@ -61,7 +61,8 @@ class RunLog(dict):
         self['environment']['python']['compiler'] = platform.python_compiler()
         self['environment']['python']['implementation'] = platform.python_implementation()
         self['environment']['python']['imported_modules'] = dict()
-        for el in sys.modules.keys():
+        modules = list(sys.modules.keys())
+        for el in modules:
             module = sys.modules[el]
             if hasattr(module, '__version__') and not str(module.__name__).__contains__('.'):
                 self['environment']['python']['imported_modules'][str(module.__name__)] = str(module.__version__)

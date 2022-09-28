@@ -1,3 +1,4 @@
+import copy
 import threading
 import socket
 import platform
@@ -61,8 +62,9 @@ class RunLog(dict):
         self['environment']['python']['compiler'] = platform.python_compiler()
         self['environment']['python']['implementation'] = platform.python_implementation()
         self['environment']['python']['imported_modules'] = dict()
-        for el in sys.modules.keys():
-            module = sys.modules[el]
+        modules = copy.copy(sys.modules)
+        for el in modules.keys():
+            module = modules[el]
             if hasattr(module, '__version__') and not str(module.__name__).__contains__('.'):
                 self['environment']['python']['imported_modules'][str(module.__name__)] = str(module.__version__)
 
@@ -192,3 +194,5 @@ class ThreadWithReturn(threading.Thread):
     def get_retval(self):
         threading.Thread.join(self)
         return self._return, self._exception
+
+

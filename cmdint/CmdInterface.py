@@ -231,6 +231,7 @@ class CmdInterface:
         """
         CmdInterface.__autocommit_mainfile_repo = do_autocommit
         CmdInterface.__autocommit_mainfile_repo_done = False
+        CmdInterface.__auto_add_repo_path()
 
     @staticmethod
     def __auto_add_repo_path():
@@ -1095,3 +1096,4 @@ class CmdInterface:
                 exit()
 
         return return_code
+

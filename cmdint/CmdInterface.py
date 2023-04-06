@@ -536,6 +536,7 @@ class CmdInterface:
         # log end messages & return code
         CmdInterface.log_message(self.__log['name'] + ' END')
         if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
+            print('EXCEPTION:', self.__log['name'], self.__log['description'])
             CmdInterface.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
         self.__log['return_code'] = return_code
         self.update_log()
@@ -734,10 +735,25 @@ class CmdInterface:
 
         run_logs = []
         if os.path.isfile(CmdInterface.__logfile_name):
-            with open(CmdInterface.__logfile_name) as f:
-                run_logs = json.load(f)
+            try:
+                with open(CmdInterface.__logfile_name) as f:
+                    run_logs = json.load(f)
 
-        if len(run_logs) == 0 or run_logs[-1]['run_id'] != CmdInterface.__run_id:
+                if CmdInterface.__logfile_access_lost:
+                    CmdInterface.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
+                CmdInterface.__logfile_access_lost = False
+
+            except Exception as err:
+                if not CmdInterface.__logfile_access_lost:
+                    error_string = 'Error accessing logfile: ' + CmdInterface.__logfile_name
+                    error_string += '\n\nException: ' + str(err)
+                    error_string += '\n\nArgs: ' + str(err.args)
+                    error_string += '\nProceeding ...'
+                    CmdInterface.log_message(error_string, True)
+                CmdInterface.__logfile_access_lost = True
+                run_logs = None
+
+        if run_logs is not None and (len(run_logs) == 0 or run_logs[-1]['run_id'] != CmdInterface.__run_id):
             run_logs.append(RunLog(run_id=CmdInterface.__run_id))
 
         return run_logs
@@ -765,13 +781,11 @@ class CmdInterface:
             else:
                 run_logs[-1]['commands'][-1] = self.__log
             with open(CmdInterface.__logfile_name, 'w') as f:
-                json.dump(run_logs, f, indent=2, sort_keys=False)
+                j = json.dumps(run_logs, indent=2, sort_keys=False)
+                f.write(j)
             CmdInterface.__cmdint_text_output = []
             if CmdInterface.__logfile_access_lost:
-                lm = CmdInterface.__print_messages
-                CmdInterface.__print_messages = False
                 CmdInterface.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
-                CmdInterface.__print_messages = lm
             CmdInterface.__logfile_access_lost = False
         except Exception as err:
             if not CmdInterface.__logfile_access_lost:
@@ -779,10 +793,7 @@ class CmdInterface:
                 error_string += '\n\nException: ' + str(err)
                 error_string += '\n\nArgs: ' + str(err.args)
                 error_string += '\nProceeding ...'
-                lm = CmdInterface.__print_messages
-                CmdInterface.__print_messages = False
                 CmdInterface.log_message(error_string, True)
-                CmdInterface.__print_messages = lm
             CmdInterface.__logfile_access_lost = True
 
     def append_log(self):
@@ -805,13 +816,11 @@ class CmdInterface:
         try:
             run_logs[-1]['commands'].append(self.__log)
             with open(CmdInterface.__logfile_name, 'w') as f:
-                json.dump(run_logs, f, indent=2, sort_keys=False)
+                j = json.dumps(run_logs, indent=2, sort_keys=False)
+                f.write(j)
             CmdInterface.__cmdint_text_output = []
             if CmdInterface.__logfile_access_lost:
-                lm = CmdInterface.__print_messages
-                CmdInterface.__print_messages = False
                 CmdInterface.log_message('Logfile access regained: ' + CmdInterface.__logfile_name, True)
-                CmdInterface.__print_messages = lm
             CmdInterface.__logfile_access_lost = False
         except Exception as err:
             if not CmdInterface.__logfile_access_lost:
@@ -819,10 +828,7 @@ class CmdInterface:
                 error_string += '\n\nException: ' + str(err)
                 error_string += '\n\nArgs: ' + str(err.args)
                 error_string += '\nProceeding ...'
-                lm = CmdInterface.__print_messages
-                CmdInterface.__print_messages = False
                 CmdInterface.log_message(error_string, True)
-                CmdInterface.__print_messages = lm
             CmdInterface.__logfile_access_lost = True
 
     @staticmethod
@@ -908,7 +914,8 @@ class CmdInterface:
                 if 'ip' in run_log['environment']['platform'].keys():
                     del run_log['environment']['platform']['ip']
             with open(out_log_name, 'w') as f:
-                json.dump(data, f, indent=2, sort_keys=False)
+                j = json.dumps(data, indent=2, sort_keys=False)
+                f.write(j)
         except Exception as err:
             print('Exception: ' + str(err))
             print(err.args)
@@ -1091,9 +1098,9 @@ class CmdInterface:
                 if exception is not None:
                     raise exception
                 else:
+                    print('EXCEPTION:', self.__log['name'], self.__log['description'])
                     raise Exception('Exiting due to error: ' + self.__return_code_meanings[return_code])
             elif CmdInterface.__exit_on_error:
                 exit()
 
         return return_code
-

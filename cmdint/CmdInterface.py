@@ -9,7 +9,7 @@ import json
 import io
 import chardet
 from pathlib import Path
-from shutil import which
+from shutil import which, move
 from cmdint.Utils import *
 from cmdint import MessageLogger
 import tarfile
@@ -507,7 +507,7 @@ class CmdInterface:
         start_time = datetime.now()
         self.__log['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")
         self.__log['time']['utc_offset'] = time.localtime().tm_gmtoff
-        CmdInterface.log_message(self.__log['name'] + ' START')
+        CmdInterface.log_message('START: ' + self.__log['name'] + ', ' + self.__log['description'])
         if CmdInterface.__message_log_level == MessageLogLevel.START_AND_END_MESSAGES and not self.__silent:
             CmdInterface.send_message('START ' + self.__log['name'])
         return start_time
@@ -534,7 +534,7 @@ class CmdInterface:
         self.__log['time']['duration'] = duration_formatted
 
         # log end messages & return code
-        CmdInterface.log_message(self.__log['name'] + ' END')
+        CmdInterface.log_message('END: ' + self.__log['name'] + ', ' + self.__log['description'])
         if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
             print('EXCEPTION:', self.__log['name'], self.__log['description'])
             CmdInterface.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
@@ -848,7 +848,22 @@ class CmdInterface:
             if os.path.isfile(logfile_name):
                 with open(logfile_name) as f:
                     log = json.load(f)
+        except json.decoder.JSONDecodeError as err:
+            print('Error decoding logfile: ' + logfile_name)
+            print('Exception: ' + str(err))
+            print(err.args)
+            print('Creating backup of logfile and starting new one ...')
+            copy_id = 1
+            try:
+                while os.path.exists(logfile_name + '.bak' + str(copy_id)):
+                    copy_id += 1
+                move(logfile_name, logfile_name + '.bak' + str(copy_id))
+            except Exception as err:
+                print('Error creating backup of logfile: ' + logfile_name)
+                print('Exception: ' + str(err))
+                print(err.args)
         except Exception as err:
+            print('Error accessing logfile: ' + logfile_name)
             print('Exception: ' + str(err))
             print(err.args)
 
@@ -892,6 +907,7 @@ class CmdInterface:
             with open(out_log_name, 'w') as f:
                 f.write(file_content)
         except Exception as err:
+            print('Error anonymizing logfile: ' + CmdInterface.__logfile_name)
             print('Exception: ' + str(err))
             print(err.args)
 
@@ -917,6 +933,7 @@ class CmdInterface:
                 j = json.dumps(data, indent=2, sort_keys=False)
                 f.write(j)
         except Exception as err:
+            print('Error anonymizing logfile: ' + out_log_name)
             print('Exception: ' + str(err))
             print(err.args)
 
@@ -933,6 +950,7 @@ class CmdInterface:
                         f.write(file_content)
 
                 except Exception as err:
+                    print('Error anonymizing file: ' + file)
                     print('Exception: ' + str(err))
                     print(err.args)
 
@@ -942,6 +960,7 @@ class CmdInterface:
                 try:
                     os.remove(file)
                 except Exception as err:
+                    print('Error removing file: ' + file)
                     print('Exception: ' + str(err))
                     print(err.args)
 

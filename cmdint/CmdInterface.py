@@ -507,7 +507,10 @@ class CmdInterface:
         start_time = datetime.now()
         self.__log['time']['start'] = start_time.strftime("%Y-%m-%d %H:%M:%S")
         self.__log['time']['utc_offset'] = time.localtime().tm_gmtoff
-        CmdInterface.log_message('START: ' + self.__log['name'] + ', ' + self.__log['description'])
+        if self.__log['description'] is not None:
+            CmdInterface.log_message('START: ' + self.__log['name'] + ', ' + self.__log['description'])
+        else:
+            CmdInterface.log_message('START: ' + self.__log['name'])
         if CmdInterface.__message_log_level == MessageLogLevel.START_AND_END_MESSAGES and not self.__silent:
             CmdInterface.send_message('START ' + self.__log['name'])
         return start_time
@@ -534,7 +537,10 @@ class CmdInterface:
         self.__log['time']['duration'] = duration_formatted
 
         # log end messages & return code
-        CmdInterface.log_message('END: ' + self.__log['name'] + ', ' + self.__log['description'])
+        if self.__log['description'] is not None:
+            CmdInterface.log_message('END: ' + self.__log['name'] + ', ' + self.__log['description'])
+        else:
+            CmdInterface.log_message('END: ' + self.__log['name'])
         if (CmdInterface.__throw_on_error or CmdInterface.__exit_on_error) and return_code <= 0:
             print('EXCEPTION:', self.__log['name'], self.__log['description'])
             CmdInterface.log_message('Exiting due to error: ' + self.__return_code_meanings[return_code])
